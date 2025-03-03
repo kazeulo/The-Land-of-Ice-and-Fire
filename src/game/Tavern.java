@@ -6,9 +6,8 @@
 
 package game;
 
-import java.util.Scanner;
-
 import charactermanager.House;
+import java.util.Scanner;
 
 public class Tavern {
 	

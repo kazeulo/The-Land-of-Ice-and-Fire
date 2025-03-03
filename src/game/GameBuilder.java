@@ -6,12 +6,11 @@
 
 package game;
 
-import java.util.Scanner;
-
 import charactermanager.Enemy;
 import charactermanager.EnemyFactory;
 import charactermanager.House;
 import charactermanager.HouseFactory;
+import java.util.Scanner;
 
 public class GameBuilder {
 	
