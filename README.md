@@ -1,7 +1,7 @@
-# Game of Westeros
+# The Land of Ice and Fire
 
 ## Introduction
-Welcome to **Game of Westeros**, a thrilling text-based adventure set in the world of Westeros. The game takes place in a time when winter can last for decades, and the fate of the Seven Kingdoms hangs in the balance. As a player, you will embark on a perilous journey to battle formidable enemies and ultimately face the Night King.
+Welcome to **The Land of Ice and Fire**, a thrilling text-based adventure set in the world of Westeros. The game takes place in a time when winter can last for decades, and the fate of the Seven Kingdoms hangs in the balance. As a player, you will embark on a perilous journey to battle formidable enemies and ultimately face the Night King.
 
 ## Gameplay
 ### Objective
