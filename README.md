@@ -47,8 +47,4 @@ You will face the following enemies across different locations:
 ## Installation & Running the Game
 1. Clone or download the repository.
 2. Ensure you have Java installed.
-3. Compile and run the game using:
-   ```bash
-   javac -d ../out $(Get-ChildItem -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
-   java java -cp ../out game.Main
-   ```
+3. Compile and run the game using the Main class.
