@@ -7,16 +7,26 @@
 package charactermanager;
 
 public class EnemyFactory {
-	// the type of enemy will depend on level
-	public Enemy createEnemy(int level) {
-		Enemy enemy = null;
-		
-		switch (level) {
-			case 1: enemy = new Wildling (); break;
-			case 2: enemy = new Giant(); break;
-			case 3: enemy = new WhiteWalker (); break;
-			case 4: enemy = new NightKing (); break;
-		}
-		return enemy;
-	}
+
+    /**
+     * Creates an enemy instance depending on the given level.
+     *
+     * @param level the difficulty or level of the enemy
+     * @return an Enemy instance corresponding to the given level
+     * @throws IllegalArgumentException if the level does not correspond to a valid enemy type
+     */
+    public Enemy createEnemy(int level) {
+        switch (level) {
+            case 1:
+                return new Wildling();
+            case 2:
+                return new Giant();
+            case 3:
+                return new WhiteWalker();
+            case 4:
+                return new NightKing();
+            default:
+                throw new IllegalArgumentException("Invalid enemy level: " + level);
+        }
+    }
 }

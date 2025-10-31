@@ -4,22 +4,50 @@
 
 package finalproject;
 
-import static org.junit.Assert.*;
-
+import charactermanager.HouseFactory;
+import charactermanager.House;
+import org.junit.Before;
 import org.junit.Test;
 
-import charactermanager.HouseFactory;
+import static org.junit.Assert.*;
 
 public class HouseFactoryTest {
 
-	@Test
-	public void testCreatedHouse() {
-		HouseFactory hFactory = new HouseFactory();
-		
-		assertEquals("Targaryen", hFactory.createHouse(1).getName());
-		assertEquals("Lannister", hFactory.createHouse(2).getName());
-		assertEquals("Stark", hFactory.createHouse(3).getName());
-		assertEquals(18, hFactory.createHouse(2).getArmor());
-		assertEquals(115, hFactory.createHouse(3).getHp());
-	}
+    private HouseFactory houseFactory;
+
+    @Before
+    public void setUp() {
+        houseFactory = new HouseFactory();
+    }
+
+    @Test
+    public void testCreateHouseById() {
+        assertEquals("Targaryen", houseFactory.createHouse(1).getName());
+        assertEquals("Lannister", houseFactory.createHouse(2).getName());
+        assertEquals("Stark", houseFactory.createHouse(3).getName());
+    }
+
+    @Test
+    public void testCreateHouseAttributes() {
+        House lannister = houseFactory.createHouse(2);
+        House stark = houseFactory.createHouse(3);
+
+        assertEquals("Lannister", lannister.getName());
+        assertEquals(18, lannister.getArmor());
+        assertEquals("Stark", stark.getName());
+        assertEquals(115, stark.getHp());
+    }
+
+    @Test
+    public void testCreatedHousesNotNull() {
+        for (int id = 1; id <= 3; id++) {
+            assertNotNull("House with ID " + id + " should not be null",
+                    houseFactory.createHouse(id));
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidHouseIdThrowsException() {
+        houseFactory.createHouse(99);
+    }
 }

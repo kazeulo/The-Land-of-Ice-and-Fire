@@ -7,16 +7,24 @@
 package charactermanager;
 
 public class HouseFactory {
-	// player gets to choose a house
-	public House createHouse(int choice) {
-		House house = null;
-		
-		switch (choice) {
-			case 1: house = new Targaryen(); break;
-			case 2: house = new Lannister(); break;
-			case 3: house = new Stark(); break;
-		}
-		return house;
-	}
-	
+
+    /**
+     * Creates a house instance based on the player's choice.
+     *
+     * @param choice the selected house option
+     * @return a House instance corresponding to the choice
+     * @throws IllegalArgumentException if the choice does not correspond to a valid house
+     */
+    public House createHouse(int choice) {
+        switch (choice) {
+            case 1:
+                return new Targaryen();
+            case 2:
+                return new Lannister();
+            case 3:
+                return new Stark();
+            default:
+                throw new IllegalArgumentException("Invalid house choice: " + choice);
+        }
+    }
 }
