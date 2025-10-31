@@ -9,14 +9,17 @@ package game;
 import java.util.Scanner;
 
 public class GameInfo {
-    private Utilities utility = new Utilities();
-    private Scanner in = new Scanner(System.in);
 
+    private final Utilities utility = new Utilities();
+    private final Scanner in = new Scanner(System.in);
+
+    /**
+     * Main menu for viewing game-related information.
+     */
     public void chooseGameInfo() {
-        int select;
-        boolean info = true;
+        boolean running = true;
 
-        while (info) {
+        while (running) {
             utility.insertSpace();
             utility.insertLine();
             System.out.println("\n                  ************  GAME INFORMATION  ************");
@@ -26,25 +29,49 @@ public class GameInfo {
             System.out.println("\t(3) The Legend of the Long Night");
             System.out.println("\t(4) Return to Main Menu");
             System.out.print("[Int] Your choice: ");
-            select = in.nextInt();
+
+            int select = getValidatedInput();
 
             utility.insertSpace();
             utility.insertLine();
 
             switch (select) {
-                case 1 -> displayHouses();
-                case 2 -> displayEnemies();
-                case 3 -> displayGameLore();
-                case 4 -> {
-                    System.out.println("Returning to main menu...");
+                case 1:
+                    displayHouses();
+                    break;
+                case 2:
+                    displayEnemies();
+                    break;
+                case 3:
+                    displayGameLore();
+                    break;
+                case 4:
+                    System.out.println("\nReturning to main menu...");
+                    utility.sleep(1000);
                     Main.mainMenu();
-                    info = false;
-                }
-                default -> System.out.println("Invalid input. Please enter a valid option.");
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid input. Please select an option between 1 and 4.");
             }
         }
     }
 
+    /**
+     * Reads validated integer input from the player.
+     */
+    private int getValidatedInput() {
+        while (!in.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a number.");
+            in.next(); // clear invalid input
+            System.out.print("[Int] Your choice: ");
+        }
+        return in.nextInt();
+    }
+
+    /**
+     * Displays information about the noble houses of Westeros.
+     */
     private void displayHouses() {
         String[] houseNames = {"House Targaryen", "House Lannister", "House Stark"};
         String[] mottos = {"Fire and Blood", "Hear Me Roar!", "Winter is Coming"};
@@ -61,8 +88,16 @@ public class GameInfo {
             System.out.println("Motto: \"" + mottos[i] + "\"");
             System.out.println("Special Ability: " + specialAbilities[i]);
         }
+
+        utility.sleep(1000);
+        System.out.println("\nPress Enter to return to the Game Info menu...");
+        in.nextLine(); // consume leftover newline
+        in.nextLine(); // wait for Enter
     }
 
+    /**
+     * Displays information about the enemies encountered in the game.
+     */
     private void displayEnemies() {
         String[] enemyNames = {"Wildling Raider", "Mountain Giant", "White Walker", "The Night King"};
         String[] locations = {"Haunted Forest", "Fist of the First Men", "Frostfangs", "Land of Always Winter"};
@@ -74,7 +109,7 @@ public class GameInfo {
             "The supreme leader of the White Walkers, a being of unparalleled power."
         };
 
-        System.out.println("\n                  *************  THE ENEMIES BEYOND THE WALL  *************");
+        System.out.println("\n          *************  THE ENEMIES BEYOND THE WALL  *************");
         for (int i = 0; i < enemyNames.length; i++) {
             utility.sleep(700);
             System.out.println("\nEnemy: " + enemyNames[i]);
@@ -82,8 +117,16 @@ public class GameInfo {
             System.out.println("Attack Power: " + attackPower[i]);
             System.out.println("Description: " + descriptions[i]);
         }
+
+        utility.sleep(1000);
+        System.out.println("\nPress Enter to return to the Game Info menu...");
+        in.nextLine(); // consume leftover newline
+        in.nextLine(); // wait for Enter
     }
 
+    /**
+     * Displays the main story and lore of the game.
+     */
     private void displayGameLore() {
         System.out.println("\n                  **********  THE LEGEND OF THE LONG NIGHT  **********");
         utility.sleep(1000);
@@ -92,9 +135,14 @@ public class GameInfo {
         System.out.println("From the Land of Always Winter, the White Walkers emerged, bringing fear to the realm.");
         System.out.println("Only the unity of Westeros' greatest warriors could drive them back.");
         utility.sleep(1000);
-        System.out.println("Now, the darkness returns. The Night King has risen once more.");
+        System.out.println("\nNow, the darkness returns. The Night King has risen once more.");
         System.out.println("You must forge your path, choose your house, and fight for the survival of mankind.");
-        System.out.println("Will you lead Westeros to victory, or will winter consume all? The choice is yours.");
-        utility.sleep(1000);
+        System.out.println("Will you lead Westeros to victory, or will winter consume all?");
+        System.out.println("The choice is yours.");
+        utility.sleep(1200);
+
+        System.out.println("\nPress Enter to return to the Game Info menu...");
+        in.nextLine(); // consume leftover newline
+        in.nextLine(); // wait for Enter
     }
 }
