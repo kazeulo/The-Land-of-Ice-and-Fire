@@ -19,14 +19,15 @@ public class StartMenu extends JFrame {
 
     public StartMenu() {
         setTitle("Main Game Menu");
-        setSize(500, 400);
+        setUndecorated(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // center window
         setLayout(new BorderLayout());
 
         // Title
-        JLabel title = new JLabel("*************  MAIN MENU  *************", SwingConstants.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        JLabel title = new JLabel("The Land of Ice and Fire", SwingConstants.CENTER);
+        title.setFont(new Font("Poppins", Font.BOLD, 23));
         title.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
         add(title, BorderLayout.NORTH);
 
@@ -39,9 +40,9 @@ public class StartMenu extends JFrame {
         JButton infoButton = new JButton("Game Info");
         JButton exitButton = new JButton("Exit");
 
-        playButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        infoButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        exitButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        playButton.setFont(new Font("Poppins", Font.PLAIN, 18));
+        infoButton.setFont(new Font("Poppins", Font.PLAIN, 18));
+        exitButton.setFont(new Font("Poppins", Font.PLAIN, 18));
 
         buttonPanel.add(playButton);
         buttonPanel.add(infoButton);
