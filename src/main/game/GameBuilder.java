@@ -70,24 +70,28 @@ public class GameBuilder {
         while (level <= 4) {
             enemy = enemyFactory.createEnemy(level);
 
+            // Player fights current enemy
             if (battleManager.duelToDeath(house, enemy, level)) {
+                // Player won the battle
                 level++;
-            } else {
-                break;
-            }
 
-            // Before boss fight
-            if (level == 4) {
-                utility.insertSpace();
-                utility.sleep(1000);
-                utility.insertLine();
-                System.out.println("\nYou are now on the last stage of your journey.");
-                utility.sleep(700);
-                System.out.println("You must prepare before facing the Night King.");
-                utility.sleep(1000);
-                System.out.println("\nEntering a tavern...\n");
-                utility.sleep(2000);
-                tavern.tavern(house);
+                // Before final boss
+                if (level == 4) {
+                    utility.insertSpace();
+                    utility.sleep(1000);
+                    utility.insertLine();
+                    System.out.println("\nYou are now on the last stage of your journey.");
+                    utility.sleep(700);
+                    System.out.println("You must prepare before facing the Night King.");
+                    utility.sleep(1000);
+                    System.out.println("\nEntering a tavern...\n");
+                    utility.sleep(2000);
+                    tavern.tavern(house);
+                }
+
+            } else {
+                // Player ran or died
+                break;
             }
         }
 

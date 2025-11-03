@@ -15,21 +15,21 @@ public class Main {
 	
 	static Utilities utility = new Utilities();
 	
-// No GUI
-//	public static void main(String[] args) {
-//		utility.promptTitle();
-//		mainMenu();
-//	}
-//	
-	// with GUI
-    public static void main(String[] args) {
-        Utilities utility = new Utilities();
-        utility.promptTitle();
-
-        SwingUtilities.invokeLater(() -> {
-            new StartMenu().setVisible(true);
-        });
-    }
+	// No GUI
+	public static void main(String[] args) {
+		utility.promptTitle();
+		mainMenu();
+	}
+	
+//	// with GUI
+//    public static void main(String[] args) {
+//        Utilities utility = new Utilities();
+//        utility.promptTitle();
+//
+//        SwingUtilities.invokeLater(() -> {
+//            new StartMenu().setVisible(true);
+//        });
+//    }
 	
 	// main menu
 	public static void mainMenu() {
