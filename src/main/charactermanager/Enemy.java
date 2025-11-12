@@ -85,7 +85,7 @@ class WhiteWalker extends Enemy{
 // has higher attack damage
 class NightKing extends Enemy{
 	public NightKing() {
-		super("Night King", "The Land of ALways Winter");
+		super("Night King", "The Land of Always Winter");
 	}
 	
 	@Override

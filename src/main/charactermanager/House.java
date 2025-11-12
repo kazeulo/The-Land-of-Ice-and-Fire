@@ -80,7 +80,7 @@ public class House extends Character{
 		int additionalAttackDamage;
 		
 		// increases base attack damage
-		// which means players attack damage will increase for all  the attack type
+		// which means players attack damage will increase for all the attack type
 		additionalAttackDamage = utility.randInt (5, 10);
 		base_attackDamage += additionalAttackDamage;
 		

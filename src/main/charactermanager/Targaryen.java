@@ -18,7 +18,6 @@ public class Targaryen extends House{
 		super("Targaryen", HP, ARMOR);
 	}
 	
-	
 	// higher attack values for house targaryen
 	@Override
 	public int attack() {

@@ -31,10 +31,20 @@ public class Tavern {
 			choice = in.nextInt();
 		
 			switch (choice) {
-				case 1: tavern.rest(house); valid = true; break;
-				case 2: tavern.repairArmor(house); valid = true; break;
-				case 3: tavern.drinkStrengthPotion(house); valid = true; break;
-				default: System.out.print("Invalid Input.");
+				case 1: 
+					tavern.rest(house); 
+					valid = true; 
+					break;
+				case 2: 
+					tavern.repairArmor(house); 
+					valid = true; 
+					break;
+				case 3: 
+					tavern.drinkStrengthPotion(house); 
+					valid = true; 
+					break;
+				default: 
+					System.out.print("Invalid Input.");
 			}
 		}
 	}
@@ -67,7 +77,7 @@ public class Tavern {
 		System.out.println("\nYour armor is now " + newArmor + " !");
 	}
 	
-	// if player wants to upgrade armor
+	// if player increase attack damage
 	void drinkStrengthPotion(House house) {
 		int addAttackDamage;
 			

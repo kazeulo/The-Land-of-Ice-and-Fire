@@ -36,7 +36,7 @@ public class Lannister extends House{
 				attackDmg = 6;
 				break;
 			case 3: 
-				System.out.println("You used " + super.getName() + " used Cresent Slash!"); 
+				System.out.println("You used Cresent Slash!"); 
 				attackDmg = 9;
 				break;
 		}
