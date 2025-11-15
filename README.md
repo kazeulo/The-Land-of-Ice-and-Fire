@@ -44,7 +44,17 @@ You will face the following enemies across different locations:
 3. Progress through levels by defeating enemies.
 4. Use the tavern strategically before facing the Night King.
 
-## Installation & Running the Game
-1. Clone or download the repository.
-2. Ensure you have Java installed.
-3. Compile and run the game using the Main class.
+## Testing
+
+The game includes basic testing to ensure functionality and gameplay mechanics work as expected. You can run tests before playing to verify that everything is functioning properly.
+
+To run the tests, execute the provided test suite or run the game normally and follow prompts to check gameplay features.
+
+### Installation & Running the Game
+
+1. Clone or download the repository.  
+2. Ensure you have Java installed.  
+3. Compile and run the game using `run.bat`.  
+4. (Optional) Run the test suite to verify game functionality before playing.
+
+

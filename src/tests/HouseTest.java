@@ -30,7 +30,6 @@ public class HouseTest {
 	
 	@Test
 	public void testReduceArmor() {
-		
 		house = hFactory.createHouse(1);
 		assertEquals(13, house.reduceArmor(100));
 		assertEquals(12, house.reduceArmor(84));

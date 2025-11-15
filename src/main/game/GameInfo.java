@@ -83,7 +83,7 @@ public class GameInfo {
 
         System.out.println("\n                  *************  NOBLE HOUSES  *************");
         for (int i = 0; i < houseNames.length; i++) {
-            utility.sleep(700);
+            // utility.sleep(700);
             System.out.println("\nHouse: " + houseNames[i]);
             System.out.println("Motto: \"" + mottos[i] + "\"");
             System.out.println("Special Ability: " + specialAbilities[i]);
@@ -99,7 +99,7 @@ public class GameInfo {
      * Displays information about the enemies encountered in the game.
      */
     private void displayEnemies() {
-        String[] enemyNames = {"Wildling Raider", "Mountain Giant", "White Walker", "The Night King"};
+        String[] enemyNames = {"Wildling", "Giant", "White Walker", "The Night King"};
         String[] locations = {"Haunted Forest", "Fist of the First Men", "Frostfangs", "Land of Always Winter"};
         String[] attackPower = {"6 - 10 damage", "7 - 13 damage", "8 - 16 damage", "11 - 23 damage"};
         String[] descriptions = {

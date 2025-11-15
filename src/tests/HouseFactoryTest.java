@@ -21,9 +21,17 @@ public class HouseFactoryTest {
     }
 
     @Test
-    public void testCreateHouseById() {
+    public void testCreateHouseTargaryen() {
         assertEquals("Targaryen", houseFactory.createHouse(1).getName());
+    }
+
+    @Test
+    public void testCreateHouseLannister(){
         assertEquals("Lannister", houseFactory.createHouse(2).getName());
+    }
+
+    @Test 
+    public void testCreateHouseStark(){
         assertEquals("Stark", houseFactory.createHouse(3).getName());
     }
 

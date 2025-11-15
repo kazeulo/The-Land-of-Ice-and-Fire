@@ -42,7 +42,7 @@ public class BattleManager {
         boolean notValid = true;
         boolean fight = false;
 
-        utility.sleep(600);
+        utility.sleep(500);
         while (notValid) {
             System.out.println("\nChoose an action:");
             System.out.println("\t(1) Attack");
