@@ -27,11 +27,11 @@ public class BattleManager {
      * Displays current HP and Armor status for the player and enemy.
      */
     public void promptStatus(House house, Enemy enemy) {
-        utility.sleep(800);
-        System.out.println("\n*********** STATUS BAR ***********\n");
+        utility.sleep(500);
+        System.out.println("\n************* STATUS BAR *************\n");
         System.out.printf("\tHouse: %s%n\tHP: %d%n\tArmor: %d%n", house.getName(), house.getHp(), house.getArmor());
         System.out.printf("%n\tEnemy: %s%n\tHP: %d%n", enemy.getName(), enemy.getHp());
-        System.out.println("\n***********************************");
+        System.out.println("\n***************************************");
     }
 
     /**
@@ -41,8 +41,6 @@ public class BattleManager {
     public boolean runOrFight() {
         boolean notValid = true;
         boolean fight = false;
-
-        utility.sleep(500);
         while (notValid) {
             System.out.println("\nChoose an action:");
             System.out.println("\t(1) Attack");
@@ -57,7 +55,7 @@ public class BattleManager {
                         notValid = false;
                         break;
                     case 2:
-                        utility.sleep(1000);
+                        utility.sleep(500);
                         System.out.println("\nYou chose to run.");
                         fight = false;
                         notValid = false;
@@ -108,15 +106,16 @@ public class BattleManager {
      * Conducts a full duel until one side dies or player runs.
      * @return true if player keeps fighting, false if player runs
      */
-    public boolean duelToDeath(House house, Enemy enemy, int level) {
+    public int duelToDeath(House house, Enemy enemy, int level) {
         boolean fight;
 
         utility.insertSpace();
         utility.insertLine();
-        utility.sleep(1000);
+        utility.sleep(500);
 
         System.out.println("\nLEVEL: " + level);
-        System.out.println("\nLocation: " + enemy.getLocation() + " \t|\t Enemy: " + enemy.getName());
+        System.out.println("Location: " + enemy.getLocation());
+        System.out.println("Enemy: " + enemy.getName());
 
         do {
             promptStatus(house, enemy);
@@ -124,12 +123,17 @@ public class BattleManager {
             if (fight) {
                 duel(house, enemy);
             } else {
+                // Player chose to run - decrease level if possible and exit
+                if (level > 1) {
+                    level--;
+                    // System.out.println("You retreat to level " + level + ".");
+                }
                 break;
             }
         } while (house.isAlive() && enemy.isAlive());
 
-        utility.sleep(800);
-        promptStatus(house, enemy);
+        // utility.sleep(800);
+        // promptStatus(house, enemy);
 
         if (!enemy.isAlive()) {
             System.out.println("\nYou killed the " + enemy.getName() + "!");
@@ -137,10 +141,8 @@ public class BattleManager {
             System.out.println("You won the battle!");
         } else if (!house.isAlive()) {
             System.out.println("\nYou have been defeated...");
-        } else {
-            System.out.println("\nYou chose to flee.");
-        }
+        } 
 
-        return fight;
+        return level;  // Return updated level
     }
 }

@@ -30,7 +30,7 @@ public class GameBuilder {
         boolean notValid = true;
 
         utility.insertSpace();
-        utility.sleep(1000);
+        utility.sleep(500);
         utility.insertLine();
 
         System.out.println("\n************  SELECT HOUSE  ************");
@@ -70,35 +70,51 @@ public class GameBuilder {
         while (level <= 4) {
             enemy = enemyFactory.createEnemy(level);
 
-            // Player fights current enemy
-            if (battleManager.duelToDeath(house, enemy, level)) {
-                // Player won the battle
-                level++;
+            // Run duel
+            int updatedLevel = battleManager.duelToDeath(house, enemy, level);
 
-                // Before final boss
+            // --- PLAYER RAN ---
+            if (updatedLevel < level) {
+                level = updatedLevel;
+                System.out.println("You retreat to level " + level + ". Prepare to face the enemy again.");
+                continue; // Go back to loop without ending the game
+            }
+
+            // --- PLAYER DIED ---
+            if (!house.isAlive()) {
+                System.out.println("\nYou have fallen in battle...");
+                break;
+            }
+
+            // --- PLAYER WON ---
+            if (!enemy.isAlive()) {
+                level++; // Progress to next level
+
+                // Before final boss (level 4)
                 if (level == 4) {
                     utility.insertSpace();
-                    utility.sleep(1000);
+                    utility.sleep(500);
                     utility.insertLine();
                     System.out.println("\nYou are now on the last stage of your journey.");
-                    utility.sleep(700);
+                    utility.sleep(200);
                     System.out.println("You must prepare before facing the Night King.");
-                    utility.sleep(1000);
+                    utility.sleep(500);
                     System.out.println("\nEntering a tavern...\n");
-                    utility.sleep(2000);
+                    utility.sleep(800);
                     tavern.tavern(house);
                 }
 
-            } else {
-                // Player ran or died
-                break;
+                continue; // Move to next level
             }
+
+            // Fallback (should not happen)
+            break;
         }
 
         // End of game
-        utility.sleep(800);
+        utility.sleep(300);
         System.out.print("\nYour journey ends now.");
-        utility.sleep(1500);
+        utility.sleep(800);
 
         if (level > 4 && !enemyFactory.createEnemy(4).isAlive()) {
             System.out.println(" You have saved Westeros!\n");
@@ -106,7 +122,7 @@ public class GameBuilder {
             System.out.println(" You have failed to save Westeros.\n");
         }
 
-        utility.sleep(800);
+        utility.sleep(300);
         utility.insertLine();
     }
 }

@@ -48,16 +48,12 @@ public class Utilities{
 	public void intro() {
 		insertSpace();
 		insertLine();
-		sleep(1200);
+		sleep(1000);
 		System.out.println("\nWinter is coming...");
-		sleep(1000);
 		System.out.println("The night grows darker and the unknown lurks in the shadows.");
-		sleep(1000);
 		System.out.println("You must go north to find and kill the Night King.");
-		sleep(1000);
 		System.out.println("Yours will be the hand that will save Westeros. ");
-		sleep(1000);
 		System.out.println("\nYour journey begins now...");
-		sleep(1300);
+		sleep(700);
 	}
 }
