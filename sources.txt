@@ -1,0 +1,15 @@
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\Character.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\Enemy.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\EnemyFactory.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\House.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\HouseFactory.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\Lannister.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\Stark.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\charactermanager\Targaryen.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\game\BattleManager.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\game\GameBuilder.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\game\GameInfo.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\game\Main.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\game\Tavern.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\game\Utilities.java
+C:\Users\ASUS\Desktop\The-Land-of-Ice-and-Fire\src\main\ui\StartMenu.java
