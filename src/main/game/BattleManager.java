@@ -8,6 +8,7 @@ package main.game;
 
 import main.charactermanager.Enemy;
 import main.charactermanager.House;
+import main.game.UI;
 
 import java.util.Scanner;
 
@@ -28,10 +29,15 @@ public class BattleManager {
      */
     public void promptStatus(House house, Enemy enemy) {
         utility.sleep(500);
-        System.out.println("\n************* STATUS BAR *************\n");
-        System.out.printf("\tHouse: %s%n\tHP: %d%n\tArmor: %d%n", house.getName(), house.getHp(), house.getArmor());
-        System.out.printf("%n\tEnemy: %s%n\tHP: %d%n", enemy.getName(), enemy.getHp());
-        System.out.println("\n***************************************");
+
+        System.out.println("\n+============ " + UI.BOLD + "STATUS BAR" + UI.RESET + " ============+");
+        System.out.printf(UI.CYAN + "    House: %s\n", house.getName());
+        System.out.printf(UI.CYAN + "    HP: %d\n", house.getHp());
+        System.out.printf(UI.CYAN + "    Armor: %d\n", house.getArmor());
+        System.out.println(UI.RESET + "--------------------------------------");
+        System.out.printf(UI.RED + "    Enemy: %s\n", enemy.getName());
+        System.out.printf(UI.RED + "    HP: %d\n", enemy.getHp());
+        System.out.println(UI.RESET + "+====================================+");
     }
 
     /**
@@ -113,7 +119,7 @@ public class BattleManager {
         utility.insertLine();
         utility.sleep(500);
 
-        System.out.println("\nLEVEL: " + level);
+        System.out.println(UI.BOLD + "\nLEVEL: "+ UI.BOLD + level);
         System.out.println("Location: " + enemy.getLocation());
         System.out.println("Enemy: " + enemy.getName());
 
