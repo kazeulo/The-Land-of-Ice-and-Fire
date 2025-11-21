@@ -7,29 +7,23 @@
 package main.game;
 
 import java.util.Scanner;
-import javax.swing.SwingUtilities;
 
-import main.ui.StartMenu;
+import main.gui.StartMenu;
 
 public class Main {
 	
 	static Utilities utility = new Utilities();
-	
-	// No GUI
-	public static void main(String[] args) {
-		utility.promptTitle();
-		mainMenu();
+
+	// with gui
+	public static void main(String[] args){
+		new StartMenu("The land of ice and fire");
 	}
-	
-//	// with GUI
-//    public static void main(String[] args) {
-//        Utilities utility = new Utilities();
-//        utility.promptTitle();
-//
-//        SwingUtilities.invokeLater(() -> {
-//            new StartMenu().setVisible(true);
-//        });
-//    }
+
+	// no gui
+	// public static void main(String[] args) {
+	// 	utility.promptTitle();
+	// 	mainMenu();
+	// }
 	
 	// main menu
 	public static void mainMenu() {
