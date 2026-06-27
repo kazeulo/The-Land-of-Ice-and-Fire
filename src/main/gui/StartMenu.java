@@ -30,7 +30,7 @@ public class StartMenu extends Application {
 
     public static void show(Stage stage) {
         Image bg = new Image(
-                StartMenu.class.getResourceAsStream("/main/gui/resources/startmenubg2.jpg"));
+                StartMenu.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);
         bgView.setPreserveRatio(false);
 

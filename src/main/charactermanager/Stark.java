@@ -26,16 +26,19 @@ public class Stark extends House{
 		int attackDmg = 0;
 		
 		switch(attackType) {
-			case 1: 
-				System.out.println("You used Flurry!"); 
-				attackDmg = 4; 
+			case 1:
+				lastMoveName = "Flurry";
+				System.out.println("You used Flurry!");
+				attackDmg = 4;
 				break;
-			case 2: 	
-				System.out.println("You used Dark Bane!"); 
+			case 2:
+				lastMoveName = "Dark Bane";
+				System.out.println("You used Dark Bane!");
 				attackDmg = 7;
 				break;
-			case 3: 
-				System.out.println("You use Millionth Edge!"); 
+			case 3:
+				lastMoveName = "Millionth Edge";
+				System.out.println("You use Millionth Edge!");
 				attackDmg = 10;
 				break;
 		}

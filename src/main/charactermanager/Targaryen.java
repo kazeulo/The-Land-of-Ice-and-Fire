@@ -28,16 +28,19 @@ public class Targaryen extends House{
 		int attackDmg = 0;
 		
 		switch(attackType) {
-			case 1: 
-				System.out.println("You used Wildfire!"); 
-				attackDmg = 6; 
+			case 1:
+				lastMoveName = "Wildfire";
+				System.out.println("You used Wildfire!");
+				attackDmg = 6;
 				break;
-			case 2: 	
-				System.out.println("You used Ignimancy!"); 
+			case 2:
+				lastMoveName = "Ignimancy";
+				System.out.println("You used Ignimancy!");
 				attackDmg = 10;
 				break;
-			case 3: 
-				System.out.println("You used Pyromania!"); 
+			case 3:
+				lastMoveName = "Pyromania";
+				System.out.println("You used Pyromania!");
 				attackDmg = 13;
 				break;
 		}

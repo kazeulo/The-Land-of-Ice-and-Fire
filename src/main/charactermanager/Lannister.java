@@ -27,16 +27,19 @@ public class Lannister extends House{
 		int attackDmg = 0;
 		
 		switch(attackType) {
-			case 1: 
-				System.out.println("You used Aura Cutter!"); 
-				attackDmg = 3; 
+			case 1:
+				lastMoveName = "Aura Cutter";
+				System.out.println("You used Aura Cutter!");
+				attackDmg = 3;
 				break;
-			case 2: 	
-				System.out.println("You used Blood Strike!"); 
+			case 2:
+				lastMoveName = "Blood Strike";
+				System.out.println("You used Blood Strike!");
 				attackDmg = 6;
 				break;
-			case 3: 
-				System.out.println("You used Cresent Slash!"); 
+			case 3:
+				lastMoveName = "Crescent Slash";
+				System.out.println("You used Cresent Slash!");
 				attackDmg = 9;
 				break;
 		}

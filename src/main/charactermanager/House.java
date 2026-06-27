@@ -14,6 +14,7 @@ public class House extends Character{
 	
 	private int baseAttackDamage = 12;
 	int armor;
+	protected String lastMoveName = "";
 	
 	public House (String name, int hp, int armor) {
 		super (name, hp);
@@ -43,6 +44,10 @@ public class House extends Character{
 	
 	public int getArmor() {
 		return armor;
+	}
+
+	public String getLastMoveName() {
+		return lastMoveName;
 	}
 	
 	// reducing value of armor every time enemy attacks

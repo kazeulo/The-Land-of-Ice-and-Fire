@@ -12,6 +12,10 @@ set JAVA_HOME=C:\Program Files\Java\jdk-25.0.3
 if exist "%TEMP%\sources.txt" del "%TEMP%\sources.txt"
 for /r "%SRC_DIR%" %%f in (*.java) do echo %%f >> "%TEMP%\sources.txt"
 
+:: Copy non-Java assets to bin (javac doesn't copy them)
+xcopy /s /q /y "%SRC_DIR%\main\assets" "%BIN_DIR%\main\assets\" 2>nul
+xcopy /s /q /y "%SRC_DIR%\main\gui\resources" "%BIN_DIR%\main\gui\resources\" 2>nul
+
 :: Compile with JavaFX on the module path
 "%JAVA_HOME%\bin\javac" ^
   --module-path "%FX_DIR%" ^
