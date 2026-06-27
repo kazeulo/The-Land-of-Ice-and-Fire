@@ -8,6 +8,7 @@ package main.game;
 
 import java.util.Scanner;
 
+import javafx.application.Application;
 import main.gui.StartMenu;
 
 public class Main {
@@ -15,7 +16,13 @@ public class Main {
 	static Utilities utility = new Utilities();
 
 	public static void main(String[] args){
-		new StartMenu("The land of ice and fire");
+		boolean consoleMode = args.length > 0 && args[0].equals("--console");
+		if (consoleMode) {
+			utility.promptTitle();
+			mainMenu();
+		} else {
+			Application.launch(StartMenu.class, args);
+		}
 	}
 
 	// main menu
