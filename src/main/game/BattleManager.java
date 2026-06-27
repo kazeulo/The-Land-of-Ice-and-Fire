@@ -103,6 +103,7 @@ public class BattleManager {
                 System.out.println("You managed to dodge!");
             } else {
                 int damage = house.takenDamage(enemy.attack());
+                house.reduceArmor(house.getHp());
                 System.out.println(enemy.getName() + " dealt " + damage + " damage to you.");
             }
         }
@@ -129,17 +130,12 @@ public class BattleManager {
             if (fight) {
                 duel(house, enemy);
             } else {
-                // Player chose to run - decrease level if possible and exit
                 if (level > 1) {
                     level--;
-                    // System.out.println("You retreat to level " + level + ".");
                 }
                 break;
             }
         } while (house.isAlive() && enemy.isAlive());
-
-        // utility.sleep(800);
-        // promptStatus(house, enemy);
 
         if (!enemy.isAlive()) {
             System.out.println("\nYou killed the " + enemy.getName() + "!");

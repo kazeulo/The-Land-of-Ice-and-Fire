@@ -81,7 +81,7 @@ class WhiteWalker extends Enemy{
 }
 
 
-// EnemyType: Nigh King (Boss)
+// EnemyType: Night King (Boss)
 // has higher attack damage
 class NightKing extends Enemy{
 	public NightKing() {

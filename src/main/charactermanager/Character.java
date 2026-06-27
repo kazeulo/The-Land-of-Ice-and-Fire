@@ -1,6 +1,6 @@
 /*
  * 	Class name: Character
- * 	Description: contains common methods for enemy and hosue
+ * 	Description: contains common methods for enemy and house
  * 	@Author KS Manejo 
  */
 

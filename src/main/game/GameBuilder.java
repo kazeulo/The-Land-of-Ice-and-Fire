@@ -116,7 +116,7 @@ public class GameBuilder {
         System.out.print("\nYour journey ends now.");
         utility.sleep(800);
 
-        if (level > 4 && !enemyFactory.createEnemy(4).isAlive()) {
+        if (level > 4) {
             System.out.println(" You have saved Westeros!\n");
         } else {
             System.out.println(" You have failed to save Westeros.\n");

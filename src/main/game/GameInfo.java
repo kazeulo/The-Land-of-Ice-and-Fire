@@ -101,7 +101,7 @@ public class GameInfo {
     private void displayEnemies() {
         String[] enemyNames = {"Wildling", "Giant", "White Walker", "The Night King"};
         String[] locations = {"Haunted Forest", "Fist of the First Men", "Frostfangs", "Land of Always Winter"};
-        String[] attackPower = {"6 - 10 damage", "7 - 13 damage", "8 - 16 damage", "11 - 23 damage"};
+        String[] attackPower = {"6 - 10 damage", "7 - 13 damage", "9 - 16 damage", "11 - 23 damage"};
         String[] descriptions = {
             "Savage fighters from beyond the Wall, skilled in ambush tactics.",
             "Colossal beings with immense strength, feared even by seasoned warriors.",

@@ -12,7 +12,7 @@ public class House extends Character{
 	
 	Utilities utility = new Utilities();
 	
-	private int base_attackDamage = 12;
+	private int baseAttackDamage = 12;
 	int armor;
 	
 	public House (String name, int hp, int armor) {
@@ -26,7 +26,7 @@ public class House extends Character{
 	 */
 	@Override
 	public int attack() {
-		return base_attackDamage;				// base attack damage
+		return baseAttackDamage;
 	}
 	
 	@Override
@@ -76,14 +76,9 @@ public class House extends Character{
 		return armor;
 	}
 					
-	public int drinkStengthPotion() {
-		int additionalAttackDamage;
-		
-		// increases base attack damage
-		// which means players attack damage will increase for all the attack type
-		additionalAttackDamage = utility.randInt (5, 10);
-		base_attackDamage += additionalAttackDamage;
-		
+	public int drinkStrengthPotion() {
+		int additionalAttackDamage = utility.randInt(5, 10);
+		baseAttackDamage += additionalAttackDamage;
 		return additionalAttackDamage;
 	}
 }
