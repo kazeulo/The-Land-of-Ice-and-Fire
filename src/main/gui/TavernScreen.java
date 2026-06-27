@@ -29,7 +29,7 @@ public class TavernScreen {
         Rectangle overlay = new Rectangle();
         overlay.setFill(Color.color(0.08, 0.04, 0.0, 0.74));
 
-        // ── Header ─────────────────────────────────────────────────────────
+        // Header ─
         Text title = new Text("THE TAVERN");
         title.setFont(Font.font("Georgia", FontWeight.BOLD, 46));
         title.setFill(Color.web("#C8A84B"));
@@ -45,7 +45,7 @@ public class TavernScreen {
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
-        // ── Current stats ──────────────────────────────────────────────────
+        // Current stats ──────────────────────────────────────────────────
         Text statsTitle = new Text("Current Status  —  House " + house.getName());
         statsTitle.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
         statsTitle.setFill(Color.color(0.75, 0.75, 0.75, 0.9));
@@ -64,7 +64,7 @@ public class TavernScreen {
         header.setAlignment(Pos.CENTER);
         header.setPadding(new Insets(28, 0, 20, 0));
 
-        // ── Option cards ───────────────────────────────────────────────────
+        // Option cards ───────────────────────────────────────────────────
         VBox restCard    = optionCard("REST",
             "Recover 40 HP",
             "You settle by the fire and let your wounds close.",
@@ -144,7 +144,7 @@ public class TavernScreen {
         ft.play();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // Helpers ───────
 
     private static VBox optionCard(String heading, String effect, String desc,
                                     String bgColor, String accent) {

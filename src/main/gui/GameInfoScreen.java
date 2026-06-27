@@ -28,7 +28,7 @@ public class GameInfoScreen {
         Rectangle overlay = new Rectangle();
         overlay.setFill(Color.color(0, 0, 0, 0.62));
 
-        // ── Header ──────────────────────────────────────────────────────────
+        // Header ──
         Button backBtn = backButton("< BACK");
         backBtn.setOnAction(e -> StartMenu.show(stage));
 
@@ -51,7 +51,7 @@ public class GameInfoScreen {
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
-        // ── Content panels ──────────────────────────────────────────────────
+        // Content panels ──────────────────────────────────────────────────
         Node housesPanel  = buildHousesPanel();
         Node enemiesPanel = buildEnemiesPanel();
         Node lorePanel    = buildLorePanel();
@@ -63,7 +63,7 @@ public class GameInfoScreen {
         VBox.setVgrow(contentArea, Priority.ALWAYS);
         HBox.setHgrow(contentArea, Priority.ALWAYS);
 
-        // ── Sidebar navigation ──────────────────────────────────────────────
+        // Sidebar navigation ──────────────────────────────────────────────
         Button housesBtn  = sideBtn("NOBLE HOUSES");
         Button enemiesBtn = sideBtn("ENEMIES");
         Button loreBtn    = sideBtn("THE LORE");
@@ -109,7 +109,7 @@ public class GameInfoScreen {
         ft.play();
     }
 
-    // ── Navigation helpers ──────────────────────────────────────────────────
+    // Navigation helpers ──────────────────────────────────────────────────
 
     private static void activateNav(Button[] btns, Node[] panels, int idx, StackPane area) {
         for (int i = 0; i < btns.length; i++) {
@@ -163,7 +163,7 @@ public class GameInfoScreen {
                "-fx-cursor: hand;";
     }
 
-    // ── Houses panel ────────────────────────────────────────────────────────
+    // Houses panel 
 
     private static Node buildHousesPanel() {
         VBox title = sectionTitle("NOBLE HOUSES OF WESTEROS");
@@ -228,7 +228,7 @@ public class GameInfoScreen {
         return card;
     }
 
-    // ── Enemies panel ────────────────────────────────────────────────────────
+    // Enemies panel 
 
     private static Node buildEnemiesPanel() {
         VBox title = sectionTitle("ENEMIES BEYOND THE WALL");
@@ -294,7 +294,7 @@ public class GameInfoScreen {
         return card;
     }
 
-    // ── Lore panel ───────────────────────────────────────────────────────────
+    // Lore panel ───
 
     private static Node buildLorePanel() {
         VBox title = sectionTitle("THE LEGEND OF THE LONG NIGHT");
@@ -327,7 +327,7 @@ public class GameInfoScreen {
         return styledScroll(content);
     }
 
-    // ── Shared UI helpers ─────────────────────────────────────────────────────
+    // Shared UI helpers ─────────────────────────────────────────────────────
 
     private static VBox sectionTitle(String text) {
         Text t = new Text(text);

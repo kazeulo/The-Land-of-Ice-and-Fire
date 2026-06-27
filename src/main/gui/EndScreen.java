@@ -31,7 +31,7 @@ public class EndScreen {
             ? Color.color(0.05, 0.03, 0.0, 0.70)
             : Color.color(0.12, 0.0,  0.0, 0.78));
 
-        // ── Outcome banner ────────────────────────────────────────────────
+        // Outcome banner ────────────────────────────────────────────────
         Text outcome = new Text(won ? "VICTORY" : "DEFEAT");
         outcome.setFont(Font.font("Georgia", FontWeight.BOLD, 72));
         outcome.setFill(won ? Color.web("#F5D060") : Color.web("#E74C3C"));
@@ -47,7 +47,7 @@ public class EndScreen {
         pulse.setCycleCount(1);
         pulse.play();
 
-        // ── Flavour text ──────────────────────────────────────────────────
+        // Flavour text ──────────────────────────────────────────────────
         Text flavour = new Text(won
             ? "You have saved Westeros!"
             : "You have failed to save Westeros.");
@@ -66,7 +66,7 @@ public class EndScreen {
         divider.setStyle("-fx-background-color: " + (won ? "#C8A84B" : "#C0392B") + ";");
         divider.setEffect(new DropShadow(6, Color.web(won ? "#C8A84B" : "#C0392B")));
 
-        // ── Final stats ───────────────────────────────────────────────────
+        // Final stats ───────────────────────────────────────────────────
         Text statsLabel = new Text("— Final Stats —");
         statsLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
         statsLabel.setFill(Color.color(0.65, 0.65, 0.65, 0.8));
@@ -87,7 +87,7 @@ public class EndScreen {
         );
         stats.setMaxWidth(320);
 
-        // ── Buttons ───────────────────────────────────────────────────────
+        // Buttons ───────────────────────────────────────────────────────
         Button playAgainBtn = endBtn("PLAY AGAIN", "#6E0000", "#A93226");
         Button menuBtn      = endBtn("MAIN MENU",  "#0D1B2A", "#1A5276");
 
@@ -97,7 +97,7 @@ public class EndScreen {
         HBox buttons = new HBox(24, playAgainBtn, menuBtn);
         buttons.setAlignment(Pos.CENTER);
 
-        // ── Layout ────────────────────────────────────────────────────────
+        // Layout 
         VBox content = new VBox(18, outcome, flavour, sub, divider, stats, buttons);
         content.setAlignment(Pos.CENTER);
         content.setPadding(new Insets(40, 0, 40, 0));

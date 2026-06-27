@@ -39,24 +39,28 @@ public class BattleScreen {
     private Text playerHpText, playerArmorText, enemyHpText;
     private VBox logBox;
     private ScrollPane logScroll;
-    private Button attackBtn, runBtn;
+    private Button attackBtn, blockBtn, specialBtn, runBtn;
     private ImageView playerSprite, enemySprite;
 
+    // Special ability cooldown (turns remaining)
+    private int specialCooldown = 0;
+
     private BattleScreen(Stage stage, House house, int level, int maxHouseHp, int maxArmor) {
-        this.stage       = stage;
-        this.house       = house;
-        this.level       = level;
-        this.maxHouseHp  = maxHouseHp;
-        this.maxArmor    = maxArmor;
-        this.enemy       = new EnemyFactory().createEnemy(level);
+        this.stage      = stage;
+        this.house      = house;
+        this.level      = level;
+        this.maxHouseHp = maxHouseHp;
+        this.maxArmor   = maxArmor;
+        this.enemy      = new EnemyFactory().createEnemy(level);
     }
 
     public static void show(Stage stage, House house, int level, int maxHouseHp, int maxArmor) {
         new BattleScreen(stage, house, level, maxHouseHp, maxArmor).build();
     }
 
+    // ── Build ─────────────────────────────────────────────────────────────────
+
     private void build() {
-        // ── Background ────────────────────────────────────────────────────────
         Image bg = new Image(getClass().getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);
         bgView.setPreserveRatio(false);
@@ -64,8 +68,8 @@ public class BattleScreen {
         Rectangle overlay = new Rectangle();
         overlay.setFill(Color.color(0, 0, 0, 0.72));
 
-        // ── Top bar ───────────────────────────────────────────────────────────
-        Text levelTxt = new Text("LEVEL " + level);
+        // ── Top bar ───────────────────────────────────────────────────────
+        Text levelTxt    = new Text("LEVEL " + level);
         levelTxt.setFont(Font.font("Georgia", FontWeight.BOLD, 15));
         levelTxt.setFill(Color.web("#C8A84B"));
 
@@ -73,43 +77,40 @@ public class BattleScreen {
         locationTxt.setFont(Font.font("Georgia", FontPosture.ITALIC, 14));
         locationTxt.setFill(Color.color(0.75, 0.75, 0.75, 0.9));
 
+        Text dot = new Text("·");
+        dot.setFill(Color.web("#C8A84B"));
+        dot.setFont(Font.font("Georgia", 14));
+
         Region topSpacer = new Region();
         HBox.setHgrow(topSpacer, Priority.ALWAYS);
 
-        HBox topBar = new HBox(14, levelTxt, new Text("·"), locationTxt, topSpacer);
+        HBox topBar = new HBox(14, levelTxt, dot, locationTxt, topSpacer);
         topBar.setAlignment(Pos.CENTER_LEFT);
         topBar.setStyle("-fx-background-color: rgba(0,0,0,0.45);");
         topBar.setPadding(new Insets(8, 20, 8, 20));
-        ((Text) topBar.getChildren().get(1)).setFill(Color.web("#C8A84B"));
-        ((Text) topBar.getChildren().get(1)).setFont(Font.font("Georgia", 14));
 
-        // ── Sprites ───────────────────────────────────────────────────────────
+        // ── Sprites ───────────────────────────────────────────────────────
         playerSprite = loadSprite(housePath(), 230);
         enemySprite  = loadSprite(enemyPath(),  230);
 
-        // ── Player stat panel ─────────────────────────────────────────────────
+        // ── Player stats ──────────────────────────────────────────────────
         Text playerName = styledLabel("HOUSE " + house.getName().toUpperCase(), "#5D8AA8", 15);
-
-        playerHpBar = bar(house.getHp() / (double) maxHouseHp, "#2ECC71");
-        playerHpText = statText(house.getHp() + " / " + maxHouseHp + " HP");
-
+        playerHpBar    = bar(house.getHp() / (double) maxHouseHp, "#2ECC71");
+        playerHpText   = statText(house.getHp() + " / " + maxHouseHp + " HP");
         playerArmorBar = bar(house.getArmor() / (double) maxArmor, "#3498DB");
         playerArmorText = statText(house.getArmor() + " / " + maxArmor + " Armor");
 
-        VBox playerStats = statPanel(
-            playerName,
+        VBox playerStats = statPanel(playerName,
             label("HP",    "#2ECC71"), playerHpBar,    playerHpText,
-            label("Armor", "#3498DB"), playerArmorBar, playerArmorText
-        );
+            label("Armor", "#3498DB"), playerArmorBar, playerArmorText);
 
         VBox playerCol = new VBox(14, playerSprite, playerStats);
         playerCol.setAlignment(Pos.CENTER);
         playerCol.setPadding(new Insets(10, 10, 0, 20));
         HBox.setHgrow(playerCol, Priority.ALWAYS);
 
-        // ── Enemy stat panel ──────────────────────────────────────────────────
-        Text enemyName = styledLabel(enemy.getName().toUpperCase(), "#E74C3C", 15);
-
+        // ── Enemy stats ───────────────────────────────────────────────────
+        Text enemyName  = styledLabel(enemy.getName().toUpperCase(), "#E74C3C", 15);
         enemyHpBar  = bar(1.0, "#E74C3C");
         enemyHpText = statText("100 / 100 HP");
 
@@ -120,57 +121,56 @@ public class BattleScreen {
         enemyCol.setPadding(new Insets(10, 20, 0, 10));
         HBox.setHgrow(enemyCol, Priority.ALWAYS);
 
-        // ── Battle field ──────────────────────────────────────────────────────
+        // ── Battlefield ───────────────────────────────────────────────────
         HBox battlefield = new HBox(0, playerCol, enemyCol);
         battlefield.setAlignment(Pos.CENTER);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
 
-        // ── Combat log ────────────────────────────────────────────────────────
+        // ── Combat log ────────────────────────────────────────────────────
         logBox = new VBox(3);
         logBox.setPadding(new Insets(6, 12, 6, 12));
+        logBox.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
 
         logScroll = new ScrollPane(logBox);
         logScroll.setFitToWidth(true);
-        logScroll.setPrefHeight(120);
-        logScroll.setMaxHeight(120);
+        logScroll.setPrefHeight(115);
+        logScroll.setMaxHeight(115);
         logScroll.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.0);" +
-            "-fx-border-color: #C8A84B40;" +
-            "-fx-border-width: 1 0 0 0;"
-        );
-        logBox.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
+            "-fx-background-color: transparent;" +
+            "-fx-border-color: #C8A84B40; -fx-border-width: 1 0 0 0;");
 
-        // ── Action buttons ────────────────────────────────────────────────────
-        attackBtn = actionBtn("ATTACK", "#6E0000", "#A93226");
-        runBtn    = actionBtn("RUN",    "#1A1A1A", "#3D3D3D");
+        logBox.widthProperty().addListener((obs, o, w) ->
+            logBox.getChildren().stream()
+                .filter(n -> n instanceof Text)
+                .forEach(n -> ((Text) n).setWrappingWidth(w.doubleValue() - 28)));
 
-        attackBtn.setOnAction(e -> doAttack());
-        runBtn.setOnAction(e    -> doRun());
+        // ── Action buttons ────────────────────────────────────────────────
+        attackBtn  = mkBtn("ATTACK",        "#6E0000", "#A93226",              170, "#C8A84B");
+        blockBtn   = mkBtn("BLOCK",         "#0D2B4A", "#1A5276",              150, "#C8A84B");
+        specialBtn = mkBtn(getSpecialName(), specialBase(), specialHover(),    200, specialGlow());
+        runBtn     = mkBtn("RUN",           "#1A1A1A", "#3D3D3D",              130, "#C8A84B");
 
-        HBox actions = new HBox(28, attackBtn, runBtn);
+        attackBtn.setOnAction(e  -> doAttack());
+        blockBtn.setOnAction(e   -> doBlock());
+        specialBtn.setOnAction(e -> doSpecial());
+        runBtn.setOnAction(e     -> doRun());
+
+        HBox actions = new HBox(14, attackBtn, blockBtn, specialBtn, runBtn);
         actions.setAlignment(Pos.CENTER);
         actions.setPadding(new Insets(10, 0, 14, 0));
         actions.setStyle("-fx-background-color: rgba(0,0,0,0.45);");
 
-        // ── Root ──────────────────────────────────────────────────────────────
+        // ── Assemble ──────────────────────────────────────────────────────
         VBox main = new VBox(topBar, battlefield, logScroll, actions);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
         main.setFillWidth(true);
 
         StackPane root = new StackPane(bgView, overlay, main);
-
         Scene scene = new Scene(root, 1280, 720);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());
         overlay.heightProperty().bind(scene.heightProperty());
-
-        // Bind log text wrapping
-        logBox.widthProperty().addListener((obs, o, w) ->
-            logBox.getChildren().stream()
-                .filter(n -> n instanceof Text)
-                .forEach(n -> ((Text) n).setWrappingWidth(w.doubleValue() - 28))
-        );
 
         main.setOpacity(0);
         stage.setScene(scene);
@@ -181,7 +181,7 @@ public class BattleScreen {
         ft.play();
     }
 
-    // ── Combat logic ─────────────────────────────────────────────────────────
+    // ── Combat actions ────────────────────────────────────────────────────────
 
     private void doAttack() {
         setBtnsEnabled(false);
@@ -191,15 +191,16 @@ public class BattleScreen {
             if (battleManager.coinToss()) {
                 addLog("Your attack missed!");
             } else {
-                int atk  = house.attack();
-                String move = house.getLastMoveName();
-                int dmg  = enemy.takenDamage(atk);
+                int atk      = house.attack();
+                String move  = house.getLastMoveName();
+                boolean crit = battleManager.critCheck();
+                if (crit) atk *= 2;
+                int dmg = enemy.takenDamage(atk);
                 shake(enemySprite);
                 flash(enemySprite, Color.web("#E74C3C"));
-                addLog("You used " + move + "!  Dealt " + dmg + " damage to " + enemy.getName() + ".");
-                animateBar(enemyHpBar, Math.max(0, enemy.getHp()) / 100.0);
-                enemyHpText.setText(Math.max(0, enemy.getHp()) + " / 100 HP");
-                colorBar(enemyHpBar, enemy.getHp(), 100, "#E74C3C");
+                if (crit) addLog("CRITICAL HIT!  " + move + " dealt " + dmg + " damage!", "#F5D060");
+                else       addLog("You used " + move + "!  Dealt " + dmg + " damage to " + enemy.getName() + ".");
+                updateEnemyBar();
             }
 
             if (!enemy.isAlive()) {
@@ -207,39 +208,166 @@ public class BattleScreen {
                 pause(1100, e2 -> handleVictory());
                 return;
             }
-
-            // Enemy counter-attack
-            pause(750, e2 -> {
-                addLog(enemy.getName() + " retaliates!");
-                pause(550, e3 -> {
-                    if (battleManager.coinToss()) {
-                        addLog("You dodged the attack!");
-                    } else {
-                        int armorBefore = house.getArmor();
-                        int dmg = house.takenDamage(enemy.attack());
-                        int newArmor = house.reduceArmor(house.getHp());
-                        shake(playerSprite);
-                        flash(playerSprite, Color.web("#C0392B"));
-                        addLog(enemy.getName() + " dealt " + dmg + " damage to you.");
-                        if (newArmor <= 0 && armorBefore > 0) addLog("Your armor is broken!");
-                        refreshPlayerStats();
-                    }
-
-                    if (!house.isAlive()) {
-                        addLog("You have fallen in battle...");
-                        pause(1200, e4 -> EndScreen.show(stage, false, house));
-                    } else {
-                        setBtnsEnabled(true);
-                    }
-                });
-            });
+            resolveEnemyTurn(false);
         });
+    }
+
+    private void doBlock() {
+        setBtnsEnabled(false);
+        addLog("You raise your shield and brace for impact!");
+        resolveEnemyTurn(true);
+    }
+
+    private void doSpecial() {
+        setBtnsEnabled(false);
+        specialCooldown = 3;
+        updateSpecialBtn();
+
+        switch (house.getName()) {
+            case "Targaryen" -> doTargaryenSpecial();
+            case "Lannister" -> doLannisterSpecial();
+            default          -> doStarkSpecial();
+        }
     }
 
     private void doRun() {
         setBtnsEnabled(false);
         addLog("You chose to flee... the realm is lost.");
         pause(1200, e -> EndScreen.show(stage, false, house));
+    }
+
+    // ── House special abilities ───────────────────────────────────────────────
+
+    /** Targaryen: Dragonfire — guaranteed 3× damage, always hits. */
+    private void doTargaryenSpecial() {
+        addLog("Drogon descends! DRAGONFIRE engulfs the " + enemy.getName() + "!");
+        pause(700, e -> {
+            int atk = house.attack() * 3;
+            int dmg = enemy.takenDamage(atk);
+            shake(enemySprite);
+            flash(enemySprite, Color.web("#E67E22"));
+            addLog("Dragonfire dealt " + dmg + " massive damage!", "#E67E22");
+            updateEnemyBar();
+
+            if (!enemy.isAlive()) {
+                addLog(enemy.getName() + " has been incinerated!");
+                pause(1100, e2 -> handleVictory());
+                return;
+            }
+            resolveEnemyTurn(false);
+        });
+    }
+
+    /** Lannister: Iron Bank — attack + lifesteal (heal 50% of damage dealt). */
+    private void doLannisterSpecial() {
+        addLog("A Lannister always pays his debts! IRON BANK activated!");
+        pause(700, e -> {
+            if (battleManager.coinToss()) {
+                int heal = 10;
+                house.setHp(Math.min(house.getHp() + heal, maxHouseHp));
+                addLog("Attack missed! But gold sustains you — recovered " + heal + " HP.");
+                refreshPlayerStats();
+            } else {
+                int atk   = house.attack();
+                String move = house.getLastMoveName();
+                int dmg   = enemy.takenDamage(atk);
+                int heal  = dmg / 2;
+                house.setHp(Math.min(house.getHp() + heal, maxHouseHp));
+                shake(enemySprite);
+                flash(enemySprite, Color.web("#D4AC0D"));
+                flash(playerSprite, Color.web("#27AE60"));
+                addLog("You used " + move + "! Dealt " + dmg + " damage, recovered " + heal + " HP!", "#D4AC0D");
+                updateEnemyBar();
+                refreshPlayerStats();
+            }
+
+            if (!enemy.isAlive()) {
+                addLog(enemy.getName() + " has been slain!");
+                pause(1100, e2 -> handleVictory());
+                return;
+            }
+            resolveEnemyTurn(false);
+        });
+    }
+
+    /** Stark: Pack Hunt — two attacks this turn, enemy counter-attacks once after. */
+    private void doStarkSpecial() {
+        addLog("Ghost joins the hunt! PACK HUNT — two strikes incoming!");
+
+        pause(600, e -> {
+            // First strike — player
+            int dmg1 = 0;
+            boolean miss1 = battleManager.coinToss();
+            if (!miss1) {
+                dmg1 = enemy.takenDamage(house.attack());
+                shake(enemySprite);
+            }
+            addLog(miss1 ? "First strike missed!" : "First strike dealt " + dmg1 + " damage!");
+            if (!miss1) updateEnemyBar();
+
+            if (!enemy.isAlive()) {
+                addLog(enemy.getName() + " fell to your first strike!");
+                pause(1100, e2 -> handleVictory());
+                return;
+            }
+
+            // Second strike — Ghost
+            pause(500, e2 -> {
+                boolean miss2 = battleManager.coinToss();
+                int dmg2 = 0;
+                if (!miss2) {
+                    dmg2 = enemy.takenDamage(house.attack());
+                    shake(enemySprite);
+                    flash(enemySprite, Color.web("#5D8AA8"));
+                }
+                if (!miss2) addLog("Ghost struck for " + dmg2 + " damage!", "#5D8AA8");
+                else        addLog("Ghost's strike missed!");
+                if (!miss2) updateEnemyBar();
+
+                if (!enemy.isAlive()) {
+                    addLog(enemy.getName() + " fell to Ghost's fangs!");
+                    pause(1100, e3 -> handleVictory());
+                    return;
+                }
+                resolveEnemyTurn(false);
+            });
+        });
+    }
+
+    // ── Shared turn resolution ────────────────────────────────────────────────
+
+    /**
+     * Enemy counter-attacks. If blocking=true, damage is completely negated.
+     * Decrements special cooldown and re-enables buttons at end of turn.
+     */
+    private void resolveEnemyTurn(boolean blocking) {
+        pause(750, e -> {
+            addLog(enemy.getName() + " retaliates!");
+            pause(550, e2 -> {
+                if (blocking) {
+                    addLog("Shield raised! Attack blocked — no damage taken.", "#3498DB");
+                } else if (battleManager.coinToss()) {
+                    addLog("You dodged the attack!");
+                } else {
+                    int armorBefore = house.getArmor();
+                    int dmg     = house.takenDamage(enemy.attack());
+                    int newArmor = house.reduceArmor(house.getHp());
+                    shake(playerSprite);
+                    flash(playerSprite, Color.web("#C0392B"));
+                    addLog(enemy.getName() + " dealt " + dmg + " damage to you.");
+                    if (newArmor <= 0 && armorBefore > 0) addLog("Your armor is broken!", "#E74C3C");
+                    refreshPlayerStats();
+                }
+
+                if (!house.isAlive()) {
+                    addLog("You have fallen in battle...");
+                    pause(1200, e3 -> EndScreen.show(stage, false, house));
+                } else {
+                    decrementCooldown();
+                    setBtnsEnabled(true);
+                }
+            });
+        });
     }
 
     private void handleVictory() {
@@ -254,22 +382,33 @@ public class BattleScreen {
         }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // ── UI helpers ────────────────────────────────────────────────────────────
 
     private void refreshPlayerStats() {
         int hp    = house.getHp();
         int armor = Math.max(0, house.getArmor());
         animateBar(playerHpBar,    Math.max(0, hp    / (double) maxHouseHp));
-        animateBar(playerArmorBar, Math.max(0, armor / (double) maxArmor));
+        animateBar(playerArmorBar, Math.max(0, Math.min(1.0, armor / (double) maxArmor)));
         playerHpText.setText(hp    + " / " + maxHouseHp + " HP");
         playerArmorText.setText(armor + " / " + maxArmor + " Armor");
         colorBar(playerHpBar, hp, maxHouseHp, "#2ECC71");
     }
 
+    private void updateEnemyBar() {
+        int hp = Math.max(0, enemy.getHp());
+        animateBar(enemyHpBar, hp / 100.0);
+        enemyHpText.setText(hp + " / 100 HP");
+        colorBar(enemyHpBar, hp, 100, "#E74C3C");
+    }
+
     private void addLog(String msg) {
+        addLog(msg, "#E8DAAF");
+    }
+
+    private void addLog(String msg, String color) {
         Text t = new Text("> " + msg);
         t.setFont(Font.font("Georgia", 13));
-        t.setFill(Color.web("#E8DAAF"));
+        t.setFill(Color.web(color));
         if (logBox.getWidth() > 0) t.setWrappingWidth(logBox.getWidth() - 28);
         logBox.getChildren().add(t);
         Platform.runLater(() -> logScroll.setVvalue(1.0));
@@ -296,14 +435,33 @@ public class BattleScreen {
 
     private void colorBar(ProgressBar pb, int hp, int max, String defaultColor) {
         double pct = hp / (double) max;
-        if (pct < 0.25)      pb.setStyle("-fx-accent: #E74C3C;");
+        if      (pct < 0.25) pb.setStyle("-fx-accent: #E74C3C;");
         else if (pct < 0.50) pb.setStyle("-fx-accent: #F39C12;");
         else                 pb.setStyle("-fx-accent: " + defaultColor + ";");
     }
 
     private void setBtnsEnabled(boolean on) {
         attackBtn.setDisable(!on);
+        blockBtn.setDisable(!on);
         runBtn.setDisable(!on);
+        if (on) updateSpecialBtn();
+        else    specialBtn.setDisable(true);
+    }
+
+    private void decrementCooldown() {
+        if (specialCooldown > 0) specialCooldown--;
+    }
+
+    private void updateSpecialBtn() {
+        if (specialCooldown > 0) {
+            specialBtn.setText(getSpecialName() + " (" + specialCooldown + ")");
+            specialBtn.setStyle(btnCss("#2A2A2A", false, "#888888"));
+            specialBtn.setDisable(true);
+        } else {
+            specialBtn.setText(getSpecialName());
+            specialBtn.setStyle(btnCss(specialBase(), false, specialGlow()));
+            specialBtn.setDisable(false);
+        }
     }
 
     private void pause(double ms, javafx.event.EventHandler<ActionEvent> then) {
@@ -351,61 +509,83 @@ public class BattleScreen {
         return t;
     }
 
-    private VBox statPanel(Text name, Text hpLbl, ProgressBar hpBar, Text hpVal,
+    private VBox statPanel(Text name,
+                           Text hpLbl,  ProgressBar hpBar,  Text hpVal,
                            Text armLbl, ProgressBar armBar, Text armVal) {
-        VBox v = new VBox(5, name,
-            hpLbl, hpBar, hpVal,
-            armLbl, armBar, armVal);
+        VBox v = new VBox(5, name, hpLbl, hpBar, hpVal, armLbl, armBar, armVal);
         v.setAlignment(Pos.CENTER_LEFT);
         v.setPadding(new Insets(12, 14, 12, 14));
         v.setMaxWidth(270);
-        v.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.55);" +
-            "-fx-border-color: #5D8AA855;" +
-            "-fx-border-width: 1;" +
-            "-fx-background-radius: 4;" +
-            "-fx-border-radius: 4;"
-        );
+        v.setStyle("-fx-background-color:rgba(0,0,0,0.55);-fx-border-color:#5D8AA855;" +
+                   "-fx-border-width:1;-fx-background-radius:4;-fx-border-radius:4;");
         return v;
     }
 
     private VBox enemyPanel(Text name, ProgressBar hpBar, Text hpVal) {
-        VBox v = new VBox(5, name,
-            label("HP", "#E74C3C"), hpBar, hpVal);
+        VBox v = new VBox(5, name, label("HP", "#E74C3C"), hpBar, hpVal);
         v.setAlignment(Pos.CENTER_LEFT);
         v.setPadding(new Insets(12, 14, 12, 14));
         v.setMaxWidth(270);
-        v.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.55);" +
-            "-fx-border-color: #E74C3C55;" +
-            "-fx-border-width: 1;" +
-            "-fx-background-radius: 4;" +
-            "-fx-border-radius: 4;"
-        );
+        v.setStyle("-fx-background-color:rgba(0,0,0,0.55);-fx-border-color:#E74C3C55;" +
+                   "-fx-border-width:1;-fx-background-radius:4;-fx-border-radius:4;");
         return v;
     }
 
-    private Button actionBtn(String label, String base, String hover) {
-        Button btn = new Button(label);
-        btn.setFont(Font.font("Georgia", FontWeight.BOLD, 18));
-        btn.setPrefSize(200, 48);
-        String bs = btnCss(base, false), hs = btnCss(hover, true);
+    private Button mkBtn(String lbl, String base, String hover, double w, String glowColor) {
+        Button btn = new Button(lbl);
+        btn.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
+        btn.setPrefSize(w, 48);
+        String bs = btnCss(base, false, glowColor), hs = btnCss(hover, true, glowColor);
         btn.setStyle(bs);
         btn.setOnMouseEntered(e -> { if (!btn.isDisabled()) btn.setStyle(hs); });
         btn.setOnMouseExited(e  -> { if (!btn.isDisabled()) btn.setStyle(bs); });
         return btn;
     }
 
-    private String btnCss(String bg, boolean glow) {
+    private String btnCss(String bg, boolean glow, String glowColor) {
         return "-fx-background-color:" + bg + ";" +
                "-fx-text-fill:#E8DAAF;" +
-               "-fx-border-color:rgba(200,168,75,0.5);" +
-               "-fx-border-width:1;" +
-               "-fx-border-radius:2;" +
-               "-fx-background-radius:2;" +
+               "-fx-border-color:rgba(200,168,75,0.4);" +
+               "-fx-border-width:1;-fx-border-radius:2;-fx-background-radius:2;" +
                "-fx-cursor:hand;" +
-               (glow ? "-fx-effect:dropshadow(gaussian,#C8A84B,16,0.2,0,0);" : "");
+               (glow ? "-fx-effect:dropshadow(gaussian," + glowColor + ",16,0.2,0,0);" : "");
     }
+
+    // ── Special ability metadata (per house) ──────────────────────────────────
+
+    private String getSpecialName() {
+        return switch (house.getName()) {
+            case "Targaryen" -> "DRAGONFIRE";
+            case "Lannister" -> "IRON BANK";
+            default          -> "PACK HUNT";
+        };
+    }
+
+    private String specialBase() {
+        return switch (house.getName()) {
+            case "Targaryen" -> "#7D2D00";
+            case "Lannister" -> "#5A4800";
+            default          -> "#0A2E2E";
+        };
+    }
+
+    private String specialHover() {
+        return switch (house.getName()) {
+            case "Targaryen" -> "#C0510A";
+            case "Lannister" -> "#A88C00";
+            default          -> "#0E5C5C";
+        };
+    }
+
+    private String specialGlow() {
+        return switch (house.getName()) {
+            case "Targaryen" -> "#E67E22";
+            case "Lannister" -> "#D4AC0D";
+            default          -> "#5D8AA8";
+        };
+    }
+
+    // ── Asset paths ───────────────────────────────────────────────────────────
 
     private String housePath() {
         return switch (house.getName()) {

@@ -25,6 +25,13 @@ public class BattleManager {
     }
 
     /**
+     * 15% chance (3/20) to return true — simulates a critical hit.
+     */
+    public boolean critCheck() {
+        return utility.randInt(1, 20) <= 3;
+    }
+
+    /**
      * Displays current HP and Armor status for the player and enemy.
      */
     public void promptStatus(House house, Enemy enemy) {
