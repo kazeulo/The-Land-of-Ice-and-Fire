@@ -58,7 +58,7 @@ public class BattleScreen {
         new BattleScreen(stage, house, level, maxHouseHp, maxArmor).build();
     }
 
-    // ── Build ─────────────────────────────────────────────────────────────────
+    // Build
 
     private void build() {
         Image bg = new Image(getClass().getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
@@ -68,7 +68,7 @@ public class BattleScreen {
         Rectangle overlay = new Rectangle();
         overlay.setFill(Color.color(0, 0, 0, 0.72));
 
-        // ── Top bar ───────────────────────────────────────────────────────
+        // Top bar 
         Text levelTxt    = new Text("LEVEL " + level);
         levelTxt.setFont(Font.font("Georgia", FontWeight.BOLD, 15));
         levelTxt.setFill(Color.web("#C8A84B"));
@@ -89,11 +89,11 @@ public class BattleScreen {
         topBar.setStyle("-fx-background-color: rgba(0,0,0,0.45);");
         topBar.setPadding(new Insets(8, 20, 8, 20));
 
-        // ── Sprites ───────────────────────────────────────────────────────
+        // Sprites 
         playerSprite = loadSprite(housePath(), 230);
         enemySprite  = loadSprite(enemyPath(),  230);
 
-        // ── Player stats ──────────────────────────────────────────────────
+        // Player stats ──────────────────────────────────────────────────
         Text playerName = styledLabel("HOUSE " + house.getName().toUpperCase(), "#5D8AA8", 15);
         playerHpBar    = bar(house.getHp() / (double) maxHouseHp, "#2ECC71");
         playerHpText   = statText(house.getHp() + " / " + maxHouseHp + " HP");
@@ -109,7 +109,7 @@ public class BattleScreen {
         playerCol.setPadding(new Insets(10, 10, 0, 20));
         HBox.setHgrow(playerCol, Priority.ALWAYS);
 
-        // ── Enemy stats ───────────────────────────────────────────────────
+        // Enemy stats ───────────────────────────────────────────────────
         Text enemyName  = styledLabel(enemy.getName().toUpperCase(), "#E74C3C", 15);
         enemyHpBar  = bar(1.0, "#E74C3C");
         enemyHpText = statText("100 / 100 HP");
@@ -121,12 +121,12 @@ public class BattleScreen {
         enemyCol.setPadding(new Insets(10, 20, 0, 10));
         HBox.setHgrow(enemyCol, Priority.ALWAYS);
 
-        // ── Battlefield ───────────────────────────────────────────────────
+        // Battlefield ───────────────────────────────────────────────────
         HBox battlefield = new HBox(0, playerCol, enemyCol);
         battlefield.setAlignment(Pos.CENTER);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
 
-        // ── Combat log ────────────────────────────────────────────────────
+        // Combat log ────────────────────────────────────────────────────
         logBox = new VBox(3);
         logBox.setPadding(new Insets(6, 12, 6, 12));
         logBox.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
@@ -144,7 +144,7 @@ public class BattleScreen {
                 .filter(n -> n instanceof Text)
                 .forEach(n -> ((Text) n).setWrappingWidth(w.doubleValue() - 28)));
 
-        // ── Action buttons ────────────────────────────────────────────────
+        // Action buttons ────────────────────────────────────────────────
         attackBtn  = mkBtn("ATTACK",        "#6E0000", "#A93226",              170, "#C8A84B");
         blockBtn   = mkBtn("BLOCK",         "#0D2B4A", "#1A5276",              150, "#C8A84B");
         specialBtn = mkBtn(getSpecialName(), specialBase(), specialHover(),    200, specialGlow());
@@ -160,7 +160,7 @@ public class BattleScreen {
         actions.setPadding(new Insets(10, 0, 14, 0));
         actions.setStyle("-fx-background-color: rgba(0,0,0,0.45);");
 
-        // ── Assemble ──────────────────────────────────────────────────────
+        // Assemble ──────────────────────────────────────────────────────
         VBox main = new VBox(topBar, battlefield, logScroll, actions);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
         main.setFillWidth(true);
@@ -181,7 +181,7 @@ public class BattleScreen {
         ft.play();
     }
 
-    // ── Combat actions ────────────────────────────────────────────────────────
+    // Combat actions ─
 
     private void doAttack() {
         setBtnsEnabled(false);
@@ -236,7 +236,7 @@ public class BattleScreen {
         pause(1200, e -> EndScreen.show(stage, false, house));
     }
 
-    // ── House special abilities ───────────────────────────────────────────────
+    // House special abilities ───────────────────────────────────────────────
 
     /** Targaryen: Dragonfire — guaranteed 3× damage, always hits. */
     private void doTargaryenSpecial() {
@@ -334,7 +334,7 @@ public class BattleScreen {
         });
     }
 
-    // ── Shared turn resolution ────────────────────────────────────────────────
+    // Shared turn resolution ────────────────────────────────────────────────
 
     /**
      * Enemy counter-attacks. If blocking=true, damage is completely negated.
@@ -382,7 +382,7 @@ public class BattleScreen {
         }
     }
 
-    // ── UI helpers ────────────────────────────────────────────────────────────
+    // UI helpers ─────
 
     private void refreshPlayerStats() {
         int hp    = house.getHp();
@@ -470,7 +470,7 @@ public class BattleScreen {
         p.play();
     }
 
-    // ── Builders ──────────────────────────────────────────────────────────────
+    // Builders ───────
 
     private ImageView loadSprite(String path, double height) {
         try {
@@ -551,7 +551,7 @@ public class BattleScreen {
                (glow ? "-fx-effect:dropshadow(gaussian," + glowColor + ",16,0.2,0,0);" : "");
     }
 
-    // ── Special ability metadata (per house) ──────────────────────────────────
+    // Special ability metadata (per house) ──────────────────────────────────
 
     private String getSpecialName() {
         return switch (house.getName()) {
@@ -585,7 +585,7 @@ public class BattleScreen {
         };
     }
 
-    // ── Asset paths ───────────────────────────────────────────────────────────
+    // Asset paths ────
 
     private String housePath() {
         return switch (house.getName()) {

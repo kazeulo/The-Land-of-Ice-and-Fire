@@ -1,60 +1,82 @@
 # The Land of Ice and Fire
 
 ## Introduction
-Welcome to **The Land of Ice and Fire**, a thrilling text-based adventure set in the world of Westeros. The game takes place in a time when winter can last for decades, and the fate of the Seven Kingdoms hangs in the balance. As a player, you will embark on a perilous journey to battle formidable enemies and ultimately face the Night King.
+Welcome to **The Land of Ice and Fire**, a text-based adventure set in the world of Westeros. Winter has come, and the fate of the Seven Kingdoms rests in your hands. Choose your house, fight your way through four levels of increasingly powerful enemies, and face the Night King in a final battle for survival.
+
+## How to Run
+
+### Requirements
+- Java JDK 17 or higher
+
+### Running the Game
+
+**Linux / WSL / macOS**
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+**Windows (Git Bash)**
+```bash
+bash run.sh
+```
+
+The script compiles all sources, syncs resources, and launches the game automatically. On systems without a display (e.g. WSL without WSLg), it falls back to console mode.
 
 ## Gameplay
-### Objective
-Your mission is to progress through four challenging levels, each featuring increasingly powerful enemies. Your ultimate goal is to defeat the Night King and save Westeros from the coming darkness.
 
-### Game Flow
-1. **Choose Your House**: Select one of the three great houses, each with unique abilities:
-   - **House Targaryen**: Gains additional attack damage.
-   - **House Lannister**: Possesses superior armor.
-   - **House Stark**: Starts with higher HP.
+### Choose Your House
+Select one of three houses at the start, each with a distinct advantage:
 
-2. **Battle System**:
-   - Combat follows a turn-based format.
-   - You can choose to **attack** or **run**.
-   - Coin toss mechanics add a chance of attack failure.
-   - Enemies have varying strengths, requiring strategy to defeat them.
+| House | Bonus | Attack Style |
+|-------|-------|-------------|
+| **Targaryen** | — | Highest attack damage (fire-based) |
+| **Lannister** | +5 Armor | Balanced attack |
+| **Stark** | +15 HP | Cold-based attack |
 
-3. **Tavern (Before Final Battle)**:
-   - Before facing the Night King, you can visit a tavern to prepare:
-     - **Rest**: Restore HP.
-     - **Repair Armor**: Strengthen your defense.
-     - **Drink Strength Potion**: Enhance attack power.
-
-## Characters & Enemies
-### Houses
-- **House Targaryen**: Known for their fiery spirit and ability to deal extra damage.
-- **House Lannister**: Wealthy and powerful, possessing stronger armor.
-- **House Stark**: Resilient and enduring, starting with higher HP.
+### Battle System
+- Combat is **turn-based** — you attack, then the enemy attacks.
+- Each turn you choose to **Attack** or **Run** (running drops you back one level).
+- There is a **12.5% miss chance** on both sides.
+- Your **armor degrades** as you take damage below 85 HP, reducing its protective value over time.
+- Armor reduces incoming damage by 30% of its current value.
 
 ### Enemies
-You will face the following enemies across different locations:
-- **Wildling** (Haunted Forest) – Attack Damage: 6-10
-- **Giant** (Fist of the First Men) – Attack Damage: 7-13
-- **White Walker** (Frostfangs) – Attack Damage: 8-16
-- **Night King** (Land of Always Winter) – Attack Damage: 11-23
 
-## How to Play
-1. Run the game and follow the on-screen prompts.
-2. Make decisions wisely—each choice affects your survival.
-3. Progress through levels by defeating enemies.
-4. Use the tavern strategically before facing the Night King.
+| Level | Enemy | Location | Attack Damage |
+|-------|-------|----------|---------------|
+| 1 | **Wildling** | Haunted Forest | 6 – 10 |
+| 2 | **Giant** | Fist of the First Men | 7 – 13 |
+| 3 | **White Walker** | Frostfangs | 9 – 16 |
+| 4 | **Night King** *(Boss)* | Land of Always Winter | 11 – 23 |
+
+### Tavern (Before the Final Battle)
+After defeating the White Walker, you visit a tavern to prepare for the Night King:
+
+- **Rest** — Restores 40 HP
+- **Repair Armor** — Restores 7 armor
+- **Drink Strength Potion** — Adds 5–10 damage to all attacks permanently
+
+## Project Structure
+
+```
+src/
+├── main/
+│   ├── charactermanager/   # Character classes, houses, enemies, factories
+│   ├── game/               # Core game logic (BattleManager, GameBuilder, Tavern, etc.)
+│   └── gui/                # Swing GUI (StartMenu, HouseSelection)
+└── tests/                  # JUnit test suite
+lib/                        # junit and hamcrest JARs
+bin/                        # Compiled output
+run.sh                      # Build & run script
+```
 
 ## Testing
+Unit tests cover the factory classes and core character mechanics. To run them manually:
 
-The game includes basic testing to ensure functionality and gameplay mechanics work as expected. You can run tests before playing to verify that everything is functioning properly.
-
-To run the tests, execute the provided test suite or run the game normally and follow prompts to check gameplay features.
-
-### Installation & Running the Game
-
-1. Clone or download the repository.  
-2. Ensure you have Java installed.  
-3. Compile and run the game using `run.bat`.  
-4. (Optional) Run the test suite to verify game functionality before playing.
-
+```bash
+javac -cp "lib/*" -d bin $(find src -name "*.java")
+java -cp "bin;lib/*" org.junit.runner.JUnitCore tests.HouseFactoryTest tests.EnemyFactoryTest tests.HouseTest
+```
+*(Use `:` instead of `;` on Linux/macOS.)*
 

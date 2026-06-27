@@ -87,7 +87,7 @@ public class EndScreen {
         );
         stats.setMaxWidth(320);
 
-        // Buttons ───────────────────────────────────────────────────────
+        // Buttons 
         Button playAgainBtn = endBtn("PLAY AGAIN", "#6E0000", "#A93226");
         Button menuBtn      = endBtn("MAIN MENU",  "#0D1B2A", "#1A5276");
 
