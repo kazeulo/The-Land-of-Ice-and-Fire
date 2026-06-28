@@ -68,7 +68,7 @@ src/
 └── tests/                  # JUnit test suite
 lib/                        # junit and hamcrest JARs
 bin/                        # Compiled output
-run.sh                      # Build & run script
+run.bat                     # Build & run script
 ```
 
 ## Testing

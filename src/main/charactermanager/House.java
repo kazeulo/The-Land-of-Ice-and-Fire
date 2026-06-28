@@ -8,7 +8,7 @@ package main.charactermanager;
 
 import main.game.Utilities;
 
-public class House extends Character{
+public abstract class House extends Character {
 	
 	Utilities utility = new Utilities();
 	
@@ -21,14 +21,20 @@ public class House extends Character{
 		this.armor = armor;
 	}
 	
-	/*	
-	 * 	will be overriden in subclass since 
+	/*
+	 * 	will be overriden in subclass since
 	 * 	different house can deal different damages
 	 */
 	@Override
 	public int attack() {
 		return baseAttackDamage;
 	}
+
+	/** Display name for this house's special ability (shown on the button). */
+	public abstract String specialName();
+
+	/** Execute the special ability against the enemy and return the full result for the UI. */
+	public abstract SpecialResult useSpecial(Enemy enemy);
 	
 	@Override
 	public int takenDamage(int attackDamage) {

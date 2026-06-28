@@ -25,6 +25,7 @@ public class StartMenu extends Application {
 
     @Override
     public void start(Stage stage) {
+        stage.setMaximized(true);
         show(stage);
     }
 
@@ -38,7 +39,7 @@ public class StartMenu extends Application {
         overlay.setFill(Color.color(0, 0, 0, 0.50));
 
         Text title = new Text("THE LAND OF ICE AND FIRE");
-        title.setFont(Font.font("Georgia", FontWeight.BOLD, 58));
+        title.setFont(Fonts.got(58));
         title.setFill(Color.WHITE);
         title.setEffect(new DropShadow(28, Color.color(0.9, 0.22, 0.0, 0.9)));
 
@@ -77,7 +78,7 @@ public class StartMenu extends Application {
 
         StackPane root = new StackPane(bgView, overlay, content);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());

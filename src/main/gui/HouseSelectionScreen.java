@@ -46,7 +46,7 @@ public class HouseSelectionScreen {
 
         // Header ─
         Text title = new Text("CHOOSE YOUR HOUSE");
-        title.setFont(Font.font("Georgia", FontWeight.BOLD, 42));
+        title.setFont(Fonts.got(42));
         title.setFill(Color.WHITE);
         title.setEffect(new DropShadow(20, Color.color(0.9, 0.22, 0.0, 0.8)));
 
@@ -64,7 +64,7 @@ public class HouseSelectionScreen {
         header.setAlignment(Pos.CENTER);
         header.setPadding(new Insets(30, 0, 24, 0));
 
-        // Cards ──
+        // Cards
         HBox cards = new HBox(28);
         cards.setAlignment(Pos.CENTER);
 
@@ -78,7 +78,7 @@ public class HouseSelectionScreen {
 
         StackPane root = new StackPane(bgView, overlay, content);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());
@@ -106,7 +106,7 @@ public class HouseSelectionScreen {
         StackPane spriteBox = new StackPane(sprite);
         spriteBox.setPrefHeight(200);
 
-        // Text ───
+        // Text─
         Text nameText = new Text("HOUSE " + NAMES[idx]);
         nameText.setFont(Font.font("Georgia", FontWeight.BOLD, 18));
         nameText.setFill(Color.web(ACCENT[idx]));
@@ -121,7 +121,7 @@ public class HouseSelectionScreen {
         sep.setMaxHeight(1);
         sep.setStyle("-fx-background-color: " + ACCENT[idx] + "80;");
 
-        // Stat rows ──────────────────────────────────────────────────────
+        // Stat rows───
         VBox stats = new VBox(5,
             statRow("HP",     String.valueOf(HP[idx]),     "#2ECC71"),
             statRow("Armor",  String.valueOf(ARMOR[idx]),  "#3498DB"),
@@ -129,7 +129,7 @@ public class HouseSelectionScreen {
         );
         stats.setAlignment(Pos.CENTER_LEFT);
 
-        // SELECT button ──────────────────────────────────────────────────
+        // SELECT button───
         Button selectBtn = new Button("SELECT");
         selectBtn.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
         selectBtn.setPrefSize(200, 44);
@@ -145,10 +145,10 @@ public class HouseSelectionScreen {
 
         selectBtn.setOnAction(e -> {
             var house = houseFactory.createHouse(houseIdx);
-            BattleScreen.show(stage, house, 1, maxHp, maxArmor);
+            LocationScreen.show(stage, house, 1, maxHp, maxArmor);
         });
 
-        // Card container ─────────────────────────────────────────────────
+        // Card container──
         VBox card = new VBox(12, spriteBox, nameText, mottoText, sep, stats, selectBtn);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPadding(new Insets(20, 20, 22, 20));

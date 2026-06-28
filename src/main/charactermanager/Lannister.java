@@ -19,6 +19,33 @@ public class Lannister extends House{
 	}
 	
 	@Override
+	public String specialName() { return "IRON BANK"; }
+
+	@Override
+	public SpecialResult useSpecial(Enemy enemy) {
+		boolean miss = utility.randInt(1, 8) == 8;
+		if (miss) {
+			return new SpecialResult(
+				"IRON BANK",
+				"A Lannister always pays his debts! IRON BANK activated!",
+				new int[]{0}, new boolean[]{true},
+				new String[]{}, new String[]{"Attack missed!"},
+				10, "But gold sustains you — recovered 10 HP."
+			);
+		}
+		int dmg  = enemy.takenDamage(attack());
+		int heal = dmg / 2;
+		return new SpecialResult(
+			"IRON BANK",
+			"A Lannister always pays his debts! IRON BANK activated!",
+			new int[]{dmg}, new boolean[]{false},
+			new String[]{"You used " + lastMoveName + "! Dealt " + dmg + " damage."},
+			new String[]{},
+			heal, "Recovered " + heal + " HP!"
+		);
+	}
+
+	@Override
 	public int attack() {
 		// attack type will be chosen randomly
 		Utilities utility = new Utilities();

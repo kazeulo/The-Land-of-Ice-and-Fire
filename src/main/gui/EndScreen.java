@@ -31,9 +31,9 @@ public class EndScreen {
             ? Color.color(0.05, 0.03, 0.0, 0.70)
             : Color.color(0.12, 0.0,  0.0, 0.78));
 
-        // Outcome banner ────────────────────────────────────────────────
+        // Outcome banner─
         Text outcome = new Text(won ? "VICTORY" : "DEFEAT");
-        outcome.setFont(Font.font("Georgia", FontWeight.BOLD, 72));
+        outcome.setFont(Fonts.got(72));
         outcome.setFill(won ? Color.web("#F5D060") : Color.web("#E74C3C"));
         DropShadow glow = new DropShadow(36,
             won ? Color.web("#C8A84B") : Color.web("#C0392B"));
@@ -47,7 +47,7 @@ public class EndScreen {
         pulse.setCycleCount(1);
         pulse.play();
 
-        // Flavour text ──────────────────────────────────────────────────
+        // Flavour text───
         Text flavour = new Text(won
             ? "You have saved Westeros!"
             : "You have failed to save Westeros.");
@@ -66,7 +66,7 @@ public class EndScreen {
         divider.setStyle("-fx-background-color: " + (won ? "#C8A84B" : "#C0392B") + ";");
         divider.setEffect(new DropShadow(6, Color.web(won ? "#C8A84B" : "#C0392B")));
 
-        // Final stats ───────────────────────────────────────────────────
+        // Final stats
         Text statsLabel = new Text("— Final Stats —");
         statsLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
         statsLabel.setFill(Color.color(0.65, 0.65, 0.65, 0.8));
@@ -104,7 +104,7 @@ public class EndScreen {
 
         StackPane root = new StackPane(bgView, overlay, content);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());
@@ -112,6 +112,7 @@ public class EndScreen {
 
         content.setOpacity(0);
         stage.setScene(scene);
+        stage.setMaximized(true);
         FadeTransition ft = new FadeTransition(Duration.millis(800), content);
         ft.setFromValue(0);
         ft.setToValue(1);

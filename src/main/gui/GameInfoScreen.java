@@ -21,19 +21,19 @@ public class GameInfoScreen {
 
     public static void show(Stage stage) {
         Image bg = new Image(
-            GameInfoScreen.class.getResourceAsStream("/main/gui/resources/startmenubg2.jpg"));
+            GameInfoScreen.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);
         bgView.setPreserveRatio(false);
 
         Rectangle overlay = new Rectangle();
         overlay.setFill(Color.color(0, 0, 0, 0.62));
 
-        // Header ──
+        // Header
         Button backBtn = backButton("< BACK");
         backBtn.setOnAction(e -> StartMenu.show(stage));
 
         Text headerTitle = new Text("GAME INFORMATION");
-        headerTitle.setFont(Font.font("Georgia", FontWeight.BOLD, 34));
+        headerTitle.setFont(Fonts.got(34));
         headerTitle.setFill(Color.WHITE);
         headerTitle.setEffect(new DropShadow(16, Color.color(0.9, 0.22, 0.0, 0.75)));
 
@@ -51,7 +51,7 @@ public class GameInfoScreen {
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
-        // Content panels ──────────────────────────────────────────────────
+        // Content panels───
         Node housesPanel  = buildHousesPanel();
         Node enemiesPanel = buildEnemiesPanel();
         Node lorePanel    = buildLorePanel();
@@ -63,7 +63,7 @@ public class GameInfoScreen {
         VBox.setVgrow(contentArea, Priority.ALWAYS);
         HBox.setHgrow(contentArea, Priority.ALWAYS);
 
-        // Sidebar navigation ──────────────────────────────────────────────
+        // Sidebar navigation
         Button housesBtn  = sideBtn("NOBLE HOUSES");
         Button enemiesBtn = sideBtn("ENEMIES");
         Button loreBtn    = sideBtn("THE LORE");
@@ -95,7 +95,7 @@ public class GameInfoScreen {
 
         StackPane root = new StackPane(bgView, overlay, main);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());
@@ -103,13 +103,14 @@ public class GameInfoScreen {
 
         main.setOpacity(0);
         stage.setScene(scene);
+        stage.setMaximized(true);
         FadeTransition ft = new FadeTransition(Duration.millis(500), main);
         ft.setFromValue(0);
         ft.setToValue(1);
         ft.play();
     }
 
-    // Navigation helpers ──────────────────────────────────────────────────
+    // Navigation helpers───
 
     private static void activateNav(Button[] btns, Node[] panels, int idx, StackPane area) {
         for (int i = 0; i < btns.length; i++) {
@@ -294,7 +295,7 @@ public class GameInfoScreen {
         return card;
     }
 
-    // Lore panel ───
+    // Lore panel─
 
     private static Node buildLorePanel() {
         VBox title = sectionTitle("THE LEGEND OF THE LONG NIGHT");
@@ -327,11 +328,11 @@ public class GameInfoScreen {
         return styledScroll(content);
     }
 
-    // Shared UI helpers ─────────────────────────────────────────────────────
+    // Shared UI helpers──
 
     private static VBox sectionTitle(String text) {
         Text t = new Text(text);
-        t.setFont(Font.font("Georgia", FontWeight.BOLD, 22));
+        t.setFont(Fonts.got(22));
         t.setFill(Color.WHITE);
         t.setEffect(new DropShadow(12, Color.color(0.9, 0.22, 0.0, 0.6)));
 

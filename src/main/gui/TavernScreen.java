@@ -31,7 +31,7 @@ public class TavernScreen {
 
         // Header ─
         Text title = new Text("THE TAVERN");
-        title.setFont(Font.font("Georgia", FontWeight.BOLD, 46));
+        title.setFont(Fonts.got(46));
         title.setFill(Color.web("#C8A84B"));
         title.setEffect(new DropShadow(22, Color.color(0.8, 0.5, 0.0, 0.8)));
 
@@ -45,7 +45,7 @@ public class TavernScreen {
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
-        // Current stats ──────────────────────────────────────────────────
+        // Current stats───
         Text statsTitle = new Text("Current Status  —  House " + house.getName());
         statsTitle.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
         statsTitle.setFill(Color.color(0.75, 0.75, 0.75, 0.9));
@@ -64,7 +64,7 @@ public class TavernScreen {
         header.setAlignment(Pos.CENTER);
         header.setPadding(new Insets(28, 0, 20, 0));
 
-        // Option cards ───────────────────────────────────────────────────
+        // Option cards
         VBox restCard    = optionCard("REST",
             "Recover 40 HP",
             "You settle by the fire and let your wounds close.",
@@ -130,7 +130,7 @@ public class TavernScreen {
 
         StackPane root = new StackPane(bgView, overlay, content);
 
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());
@@ -138,13 +138,14 @@ public class TavernScreen {
 
         content.setOpacity(0);
         stage.setScene(scene);
+        stage.setMaximized(true);
         FadeTransition ft = new FadeTransition(Duration.millis(600), content);
         ft.setFromValue(0);
         ft.setToValue(1);
         ft.play();
     }
 
-    // Helpers ───────
+    // Helpers─
 
     private static VBox optionCard(String heading, String effect, String desc,
                                     String bgColor, String accent) {

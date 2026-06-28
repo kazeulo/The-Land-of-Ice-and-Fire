@@ -18,7 +18,23 @@ public class Targaryen extends House{
 		super("Targaryen", HP, ARMOR);
 	}
 	
-	// higher attack values for house targaryen
+	@Override
+	public String specialName() { return "DRAGONFIRE"; }
+
+	@Override
+	public SpecialResult useSpecial(Enemy enemy) {
+		int dmg = enemy.takenDamage(attack() * 3);
+		return new SpecialResult(
+			"DRAGONFIRE",
+			"Drogon descends! DRAGONFIRE engulfs the " + enemy.getName() + "!",
+			new int[]{dmg},
+			new boolean[]{false},
+			new String[]{"Dragonfire dealt " + dmg + " massive damage!"},
+			new String[]{},
+			0, null
+		);
+	}
+
 	@Override
 	public int attack() {
 		Utilities utility = new Utilities();

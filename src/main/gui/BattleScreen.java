@@ -22,6 +22,7 @@ import javafx.util.Duration;
 import main.charactermanager.Enemy;
 import main.charactermanager.EnemyFactory;
 import main.charactermanager.House;
+import main.charactermanager.SpecialResult;
 import main.game.BattleManager;
 
 public class BattleScreen {
@@ -93,7 +94,7 @@ public class BattleScreen {
         playerSprite = loadSprite(housePath(), 230);
         enemySprite  = loadSprite(enemyPath(),  230);
 
-        // Player stats ──────────────────────────────────────────────────
+        // Player stats───
         Text playerName = styledLabel("HOUSE " + house.getName().toUpperCase(), "#5D8AA8", 15);
         playerHpBar    = bar(house.getHp() / (double) maxHouseHp, "#2ECC71");
         playerHpText   = statText(house.getHp() + " / " + maxHouseHp + " HP");
@@ -109,7 +110,7 @@ public class BattleScreen {
         playerCol.setPadding(new Insets(10, 10, 0, 20));
         HBox.setHgrow(playerCol, Priority.ALWAYS);
 
-        // Enemy stats ───────────────────────────────────────────────────
+        // Enemy stats
         Text enemyName  = styledLabel(enemy.getName().toUpperCase(), "#E74C3C", 15);
         enemyHpBar  = bar(1.0, "#E74C3C");
         enemyHpText = statText("100 / 100 HP");
@@ -121,12 +122,12 @@ public class BattleScreen {
         enemyCol.setPadding(new Insets(10, 20, 0, 10));
         HBox.setHgrow(enemyCol, Priority.ALWAYS);
 
-        // Battlefield ───────────────────────────────────────────────────
+        // Battlefield
         HBox battlefield = new HBox(0, playerCol, enemyCol);
         battlefield.setAlignment(Pos.CENTER);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
 
-        // Combat log ────────────────────────────────────────────────────
+        // Combat log─
         logBox = new VBox(3);
         logBox.setPadding(new Insets(6, 12, 6, 12));
         logBox.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
@@ -144,7 +145,7 @@ public class BattleScreen {
                 .filter(n -> n instanceof Text)
                 .forEach(n -> ((Text) n).setWrappingWidth(w.doubleValue() - 28)));
 
-        // Action buttons ────────────────────────────────────────────────
+        // Action buttons─
         attackBtn  = mkBtn("ATTACK",        "#6E0000", "#A93226",              170, "#C8A84B");
         blockBtn   = mkBtn("BLOCK",         "#0D2B4A", "#1A5276",              150, "#C8A84B");
         specialBtn = mkBtn(getSpecialName(), specialBase(), specialHover(),    200, specialGlow());
@@ -160,13 +161,13 @@ public class BattleScreen {
         actions.setPadding(new Insets(10, 0, 14, 0));
         actions.setStyle("-fx-background-color: rgba(0,0,0,0.45);");
 
-        // Assemble ──────────────────────────────────────────────────────
+        // Assemble───
         VBox main = new VBox(topBar, battlefield, logScroll, actions);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
         main.setFillWidth(true);
 
         StackPane root = new StackPane(bgView, overlay, main);
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root);
         bgView.fitWidthProperty().bind(scene.widthProperty());
         bgView.fitHeightProperty().bind(scene.heightProperty());
         overlay.widthProperty().bind(scene.widthProperty());
@@ -223,10 +224,53 @@ public class BattleScreen {
         specialCooldown = 3;
         updateSpecialBtn();
 
-        switch (house.getName()) {
-            case "Targaryen" -> doTargaryenSpecial();
-            case "Lannister" -> doLannisterSpecial();
-            default          -> doStarkSpecial();
+        SpecialResult r = house.useSpecial(enemy);
+        addLog(r.callout);
+
+        pause(700, e1 -> {
+            animateSpecialHit(r, 0);
+
+            if (!enemy.isAlive()) {
+                addLog(enemy.getName() + " has been slain!");
+                pause(1100, e2 -> handleVictory());
+                return;
+            }
+
+            if (r.damages.length > 1) {
+                pause(500, e2 -> {
+                    animateSpecialHit(r, 1);
+                    if (!enemy.isAlive()) {
+                        addLog(enemy.getName() + " fell!");
+                        pause(1100, e3 -> handleVictory());
+                        return;
+                    }
+                    applySpecialHealing(r);
+                    resolveEnemyTurn(false);
+                });
+            } else {
+                applySpecialHealing(r);
+                resolveEnemyTurn(false);
+            }
+        });
+    }
+
+    private void animateSpecialHit(SpecialResult r, int idx) {
+        if (r.missed[idx]) {
+            addLog(r.missLogs[idx]);
+        } else {
+            shake(enemySprite);
+            flash(enemySprite, Color.web(specialGlow()));
+            addLog(r.hitLogs[idx], specialGlow());
+            updateEnemyBar();
+        }
+    }
+
+    private void applySpecialHealing(SpecialResult r) {
+        if (r.healing > 0) {
+            house.setHp(Math.min(house.getHp() + r.healing, maxHouseHp));
+            flash(playerSprite, Color.web("#27AE60"));
+            if (r.healLog != null) addLog(r.healLog, "#27AE60");
+            refreshPlayerStats();
         }
     }
 
@@ -236,105 +280,7 @@ public class BattleScreen {
         pause(1200, e -> EndScreen.show(stage, false, house));
     }
 
-    // House special abilities ───────────────────────────────────────────────
-
-    /** Targaryen: Dragonfire — guaranteed 3× damage, always hits. */
-    private void doTargaryenSpecial() {
-        addLog("Drogon descends! DRAGONFIRE engulfs the " + enemy.getName() + "!");
-        pause(700, e -> {
-            int atk = house.attack() * 3;
-            int dmg = enemy.takenDamage(atk);
-            shake(enemySprite);
-            flash(enemySprite, Color.web("#E67E22"));
-            addLog("Dragonfire dealt " + dmg + " massive damage!", "#E67E22");
-            updateEnemyBar();
-
-            if (!enemy.isAlive()) {
-                addLog(enemy.getName() + " has been incinerated!");
-                pause(1100, e2 -> handleVictory());
-                return;
-            }
-            resolveEnemyTurn(false);
-        });
-    }
-
-    /** Lannister: Iron Bank — attack + lifesteal (heal 50% of damage dealt). */
-    private void doLannisterSpecial() {
-        addLog("A Lannister always pays his debts! IRON BANK activated!");
-        pause(700, e -> {
-            if (battleManager.coinToss()) {
-                int heal = 10;
-                house.setHp(Math.min(house.getHp() + heal, maxHouseHp));
-                addLog("Attack missed! But gold sustains you — recovered " + heal + " HP.");
-                refreshPlayerStats();
-            } else {
-                int atk   = house.attack();
-                String move = house.getLastMoveName();
-                int dmg   = enemy.takenDamage(atk);
-                int heal  = dmg / 2;
-                house.setHp(Math.min(house.getHp() + heal, maxHouseHp));
-                shake(enemySprite);
-                flash(enemySprite, Color.web("#D4AC0D"));
-                flash(playerSprite, Color.web("#27AE60"));
-                addLog("You used " + move + "! Dealt " + dmg + " damage, recovered " + heal + " HP!", "#D4AC0D");
-                updateEnemyBar();
-                refreshPlayerStats();
-            }
-
-            if (!enemy.isAlive()) {
-                addLog(enemy.getName() + " has been slain!");
-                pause(1100, e2 -> handleVictory());
-                return;
-            }
-            resolveEnemyTurn(false);
-        });
-    }
-
-    /** Stark: Pack Hunt — two attacks this turn, enemy counter-attacks once after. */
-    private void doStarkSpecial() {
-        addLog("Ghost joins the hunt! PACK HUNT — two strikes incoming!");
-
-        pause(600, e -> {
-            // First strike — player
-            int dmg1 = 0;
-            boolean miss1 = battleManager.coinToss();
-            if (!miss1) {
-                dmg1 = enemy.takenDamage(house.attack());
-                shake(enemySprite);
-            }
-            addLog(miss1 ? "First strike missed!" : "First strike dealt " + dmg1 + " damage!");
-            if (!miss1) updateEnemyBar();
-
-            if (!enemy.isAlive()) {
-                addLog(enemy.getName() + " fell to your first strike!");
-                pause(1100, e2 -> handleVictory());
-                return;
-            }
-
-            // Second strike — Ghost
-            pause(500, e2 -> {
-                boolean miss2 = battleManager.coinToss();
-                int dmg2 = 0;
-                if (!miss2) {
-                    dmg2 = enemy.takenDamage(house.attack());
-                    shake(enemySprite);
-                    flash(enemySprite, Color.web("#5D8AA8"));
-                }
-                if (!miss2) addLog("Ghost struck for " + dmg2 + " damage!", "#5D8AA8");
-                else        addLog("Ghost's strike missed!");
-                if (!miss2) updateEnemyBar();
-
-                if (!enemy.isAlive()) {
-                    addLog(enemy.getName() + " fell to Ghost's fangs!");
-                    pause(1100, e3 -> handleVictory());
-                    return;
-                }
-                resolveEnemyTurn(false);
-            });
-        });
-    }
-
-    // Shared turn resolution ────────────────────────────────────────────────
+    // Shared turn resolution─
 
     /**
      * Enemy counter-attacks. If blocking=true, damage is completely negated.
@@ -378,11 +324,11 @@ public class BattleScreen {
             EndScreen.show(stage, true, house);
         } else {
             addLog("You advance to Level " + (level + 1) + "!");
-            pause(900, e -> BattleScreen.show(stage, house, level + 1, maxHouseHp, maxArmor));
+            pause(900, e -> LocationScreen.show(stage, house, level + 1, maxHouseHp, maxArmor));
         }
     }
 
-    // UI helpers ─────
+    // UI helpers ─
 
     private void refreshPlayerStats() {
         int hp    = house.getHp();
@@ -470,7 +416,7 @@ public class BattleScreen {
         p.play();
     }
 
-    // Builders ───────
+    // Builders─
 
     private ImageView loadSprite(String path, double height) {
         try {
@@ -551,14 +497,10 @@ public class BattleScreen {
                (glow ? "-fx-effect:dropshadow(gaussian," + glowColor + ",16,0.2,0,0);" : "");
     }
 
-    // Special ability metadata (per house) ──────────────────────────────────
+    // Special ability metadata (per house)
 
     private String getSpecialName() {
-        return switch (house.getName()) {
-            case "Targaryen" -> "DRAGONFIRE";
-            case "Lannister" -> "IRON BANK";
-            default          -> "PACK HUNT";
-        };
+        return house.specialName();
     }
 
     private String specialBase() {
@@ -585,7 +527,7 @@ public class BattleScreen {
         };
     }
 
-    // Asset paths ────
+    // Asset paths 
 
     private String housePath() {
         return switch (house.getName()) {
