@@ -324,14 +324,11 @@ public class BattleScreen {
     }
 
     private void handleVictory() {
-        if (level == 3) {
-            addLog("You prepare for the final battle...");
-            pause(1000, e -> TavernScreen.show(stage, house, maxHouseHp, maxArmor));
-        } else if (level == 4) {
+        if (level == 4) {
             EndScreen.show(stage, true, house);
         } else {
-            addLog("You advance to Level " + (level + 1) + "!");
-            pause(900, e -> LocationScreen.show(stage, house, level + 1, maxHouseHp, maxArmor));
+            addLog("Victory!");
+            pause(900, e -> VictoryNarrativeScreen.show(stage, house, level, maxHouseHp, maxArmor));
         }
     }
 

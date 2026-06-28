@@ -61,7 +61,28 @@ public class TavernScreen {
         HBox statsRow = new HBox(28, hpStat, armorStat);
         statsRow.setAlignment(Pos.CENTER);
 
-        VBox header = new VBox(10, title, subtitle, divider, statsTitle, statsRow);
+        // Innkeeper dialogue
+        Text innkeeperLabel = new Text("THE INNKEEPER");
+        innkeeperLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 11));
+        innkeeperLabel.setFill(Color.web("#C8A84B88"));
+
+        Text innkeeperText = new Text(innkeeperQuote(house, house.getHp(), maxHouseHp));
+        innkeeperText.setFont(Font.font("Georgia", FontPosture.ITALIC, 14));
+        innkeeperText.setFill(Color.color(0.74, 0.70, 0.60, 0.90));
+        innkeeperText.setTextAlignment(TextAlignment.CENTER);
+        innkeeperText.setLineSpacing(5);
+        innkeeperText.setWrappingWidth(560);
+
+        VBox innkeeperBox = new VBox(6, innkeeperLabel, innkeeperText);
+        innkeeperBox.setAlignment(Pos.CENTER);
+        innkeeperBox.setPadding(new Insets(8, 20, 8, 20));
+        innkeeperBox.setStyle(
+            "-fx-background-color: rgba(0,0,0,0.30);" +
+            "-fx-border-color: #C8A84B30;" +
+            "-fx-border-width: 1;-fx-background-radius: 3;-fx-border-radius: 3;");
+        innkeeperBox.setMaxWidth(600);
+
+        VBox header = new VBox(10, title, subtitle, divider, statsTitle, statsRow, innkeeperBox);
         header.setAlignment(Pos.CENTER);
         header.setPadding(new Insets(28, 0, 20, 0));
 
@@ -89,7 +110,7 @@ public class TavernScreen {
 
         Button continueBtn = continueButton();
         continueBtn.setVisible(false);
-        continueBtn.setOnAction(e -> BattleScreen.show(stage, house, 4, maxHouseHp, maxArmor));
+        continueBtn.setOnAction(e -> NightKingCutscene.show(stage, house, maxHouseHp, maxArmor));
 
         // Wire up choices
         getChooseBtn(restCard).setOnAction(e -> {
@@ -244,5 +265,41 @@ public class TavernScreen {
                "-fx-border-width:1;-fx-border-radius:3;-fx-background-radius:3;" +
                "-fx-cursor:hand;" +
                (glow ? "-fx-effect:dropshadow(gaussian," + accent + ",12,0.3,0,0);" : "");
+    }
+
+    private static String innkeeperQuote(main.charactermanager.House house, int hp, int maxHp) {
+        double pct = hp / (double) maxHp;
+
+        String base;
+        if (pct < 0.35) {
+            base = "Gods be good, look at you. You're more wound than warrior. I've seen dead men look healthier, " +
+                   "and I mean that literally — there's one walking toward us if you don't do something about it.";
+        } else if (pct < 0.70) {
+            base = "You've taken some hard knocks, friend. The Night King is different from what you've faced — " +
+                   "he doesn't tire, he doesn't feel pain, and he has been waiting since before kingdoms existed.";
+        } else {
+            base = "Sharp as a blade, you look. Don't let it make you reckless — the Night King has been patient " +
+                   "for eight thousand years. He can afford to wait for you to make exactly one mistake.";
+        }
+
+        String houseLine = switch (house.getName()) {
+            case "Targaryen" -> pct < 0.35
+                ? "  Even dragons can fall.  Rest.  Recover your fire."
+                : pct < 0.70
+                ? "  I've heard dragon fire can kill a White Walker.  Let's hope that holds true for their king."
+                : "  Fire and blood.  You've got both.  Show him.";
+            case "Lannister" -> pct < 0.35
+                ? "  Even Lannister gold can't buy back what you've lost out there.  Take what you can."
+                : pct < 0.70
+                ? "  I served a Lannister bannerman once.  They paid well.  Stay alive long enough to pay your tab."
+                : "  The Night King won't care about your house name.  Make him care.";
+            default -> pct < 0.35
+                ? "  Your ancestors held the Wall for eight thousand years.  Don't let it end like this."
+                : pct < 0.70
+                ? "  You're a Stark.  The North sent its best.  That means something.  It has to."
+                : "  Ghost is outside.  Even the wolf knows what's coming.  Winter is here, Stark.  End it.";
+        };
+
+        return "\"" + base + houseLine + "\"";
     }
 }

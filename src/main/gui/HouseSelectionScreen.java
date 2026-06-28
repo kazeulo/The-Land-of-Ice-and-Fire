@@ -146,7 +146,7 @@ public class HouseSelectionScreen {
 
         selectBtn.setOnAction(e -> {
             var house = houseFactory.createHouse(houseIdx);
-            LocationScreen.show(stage, house, 1, maxHp, maxArmor);
+            CharacterIntroScreen.show(stage, house, maxHp, maxArmor);
         });
 
         // Card container──
