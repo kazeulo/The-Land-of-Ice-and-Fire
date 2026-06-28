@@ -64,6 +64,7 @@ public class BattleScreen {
     // Build
 
     private void build() {
+        AudioManager.play(AudioManager.Track.BATTLE);
         Image bg = new Image(getClass().getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);
         bgView.setPreserveRatio(false);

@@ -20,6 +20,7 @@ import javafx.util.Duration;
 public class GameInfoScreen {
 
     public static void show(Stage stage) {
+        AudioManager.play(AudioManager.Track.MENU);
         Image bg = new Image(
             GameInfoScreen.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);

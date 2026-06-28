@@ -20,6 +20,7 @@ import main.charactermanager.House;
 public class TavernScreen {
 
     public static void show(Stage stage, House house, int maxHouseHp, int maxArmor) {
+        AudioManager.play(AudioManager.Track.MENU);
         Image bg = new Image(
             TavernScreen.class.getResourceAsStream("/main/assets/img/bg/tavern.png"));
         ImageView bgView = new ImageView(bg);

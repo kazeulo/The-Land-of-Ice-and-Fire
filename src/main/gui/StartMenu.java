@@ -30,6 +30,7 @@ public class StartMenu extends Application {
     }
 
     public static void show(Stage stage) {
+        AudioManager.play(AudioManager.Track.MENU);
         Image bg = new Image(
                 StartMenu.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);

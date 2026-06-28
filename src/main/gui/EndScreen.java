@@ -20,6 +20,7 @@ import main.charactermanager.House;
 public class EndScreen {
 
     public static void show(Stage stage, boolean won, House house) {
+        AudioManager.play(AudioManager.Track.MENU);
         Image bg = new Image(
             EndScreen.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);

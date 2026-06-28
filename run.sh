@@ -30,7 +30,7 @@ fi
 # ---------- Paths ---------------------------------------------------------
 FX_DIR="lib/javafx"
 LIB="lib/junit-4.13.2.jar;lib/hamcrest-core-1.3.jar"
-MODS="javafx.controls,javafx.graphics"
+MODS="javafx.controls,javafx.graphics,javafx.media"
 
 # Let Windows find the JavaFX native DLLs (glass.dll, prism_d3d.dll, …)
 export PATH="$FX_DIR/bin:$PATH"

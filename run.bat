@@ -19,7 +19,7 @@ xcopy /s /q /y "%SRC_DIR%\main\gui\resources" "%BIN_DIR%\main\gui\resources\" 2>
 :: Compile with JavaFX on the module path
 "%JAVA_HOME%\bin\javac" ^
   --module-path "%FX_DIR%" ^
-  --add-modules javafx.controls,javafx.graphics ^
+  --add-modules javafx.controls,javafx.graphics,javafx.media ^
   -cp "%LIB_DIR%\junit-4.13.2.jar;%LIB_DIR%\hamcrest-core-1.3.jar" ^
   -d "%BIN_DIR%" ^
   @"%TEMP%\sources.txt"
@@ -32,8 +32,8 @@ set PATH=%FX_DIR%\bin;%PATH%
 :: Run with JavaFX on the module path (pass --console to skip the GUI)
 "%JAVA_HOME%\bin\java" ^
   --module-path "%FX_DIR%" ^
-  --add-modules javafx.controls,javafx.graphics ^
-  --enable-native-access=javafx.graphics ^
+  --add-modules javafx.controls,javafx.graphics,javafx.media ^
+  --enable-native-access=javafx.graphics,javafx.media ^
   -cp "%BIN_DIR%;%LIB_DIR%\junit-4.13.2.jar;%LIB_DIR%\hamcrest-core-1.3.jar" ^
   main.game.Main %*
 

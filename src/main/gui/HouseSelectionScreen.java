@@ -36,6 +36,7 @@ public class HouseSelectionScreen {
     private static final String[] CARD_BG  = {"#5A0000CC", "#5A4800CC", "#1A2A3ACC"};
 
     public static void show(Stage stage) {
+        AudioManager.play(AudioManager.Track.MENU);
         Image bg = new Image(
             HouseSelectionScreen.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
         ImageView bgView = new ImageView(bg);
