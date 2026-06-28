@@ -21,7 +21,7 @@ public class TavernScreen {
 
     public static void show(Stage stage, House house, int maxHouseHp, int maxArmor) {
         Image bg = new Image(
-            TavernScreen.class.getResourceAsStream("/main/assets/img/bg/startmenubg.png"));
+            TavernScreen.class.getResourceAsStream("/main/assets/img/bg/tavern.png"));
         ImageView bgView = new ImageView(bg);
         bgView.setPreserveRatio(false);
 
@@ -45,7 +45,7 @@ public class TavernScreen {
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
-        // Current stats───
+        // Current stats
         Text statsTitle = new Text("Current Status  —  House " + house.getName());
         statsTitle.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
         statsTitle.setFill(Color.color(0.75, 0.75, 0.75, 0.9));

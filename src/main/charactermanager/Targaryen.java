@@ -23,13 +23,13 @@ public class Targaryen extends House{
 
 	@Override
 	public SpecialResult useSpecial(Enemy enemy) {
-		int dmg = enemy.takenDamage(attack() * 3);
+		int dmg = enemy.takenDamage(attack() * 2);
 		return new SpecialResult(
 			"DRAGONFIRE",
 			"Drogon descends! DRAGONFIRE engulfs the " + enemy.getName() + "!",
 			new int[]{dmg},
 			new boolean[]{false},
-			new String[]{"Dragonfire dealt " + dmg + " massive damage!"},
+			new String[]{"Dragonfire dealt " + dmg + " damage!"},
 			new String[]{},
 			0, null
 		);

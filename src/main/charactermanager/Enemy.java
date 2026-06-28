@@ -8,31 +8,29 @@ package main.charactermanager;
 import main.game.Utilities;
 
 public class Enemy extends Character{
-	
+
 	private String location;
-	Utilities utility =  new Utilities();	// in order to access randInt method
-	
-	private static final int HP = 100;
-	
-	public Enemy (String name, String location) {
-		super(name, HP);
+	Utilities utility =  new Utilities();
+
+	public Enemy (String name, String location, int hp) {
+		super(name, hp);
 		this.location = location;
 	}
-	
-	/*	
-	 * will be overriden in subclass since 
+
+	/*
+	 * will be overriden in subclass since
 	 * different enemy types can deal different damages
 	 */
 	@Override
 	public int attack () {
 		return 0;
 	}
-	
+
 	// Setter and getter for location
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+
 	public String getLocation (){
 		return location;
 	}
@@ -42,13 +40,12 @@ public class Enemy extends Character{
 // EnemyType: Wildling
 class Wildling extends Enemy {
 	public Wildling() {
-		super("Wildling", "Haunted Forest");
+		super("Wildling", "Haunted Forest", 80);
 	}
-	
+
 	@Override
 	public int attack () {
-		int attackDmg = utility.randInt(6, 10);
-		return attackDmg;
+		return utility.randInt(6, 10);
 	}
 }
 
@@ -56,13 +53,12 @@ class Wildling extends Enemy {
 // EnemyType: Giant
 class Giant extends Enemy{
 	public Giant() {
-		super("Giant", "Fist of the First Men");
+		super("Giant", "Fist of the First Men", 130);
 	}
-	
+
 	@Override
 	public int attack () {
-		int attackDmg = utility.randInt(7, 13);
-		return attackDmg;
+		return utility.randInt(7, 13);
 	}
 }
 
@@ -70,27 +66,24 @@ class Giant extends Enemy{
 // EnemyType: WhiteWalker
 class WhiteWalker extends Enemy{
 	public WhiteWalker() {
-		super("White Walker", "Frostfangs");
+		super("White Walker", "Frostfangs", 165);
 	}
-	
+
 	@Override
 	public int attack () {
-		int attackDmg = utility.randInt(9, 16);
-		return attackDmg;
+		return utility.randInt(9, 16);
 	}
 }
 
 
 // EnemyType: Night King (Boss)
-// has higher attack damage
 class NightKing extends Enemy{
 	public NightKing() {
-		super("Night King", "The Land of Always Winter");
+		super("Night King", "The Land of Always Winter", 220);
 	}
-	
+
 	@Override
 	public int attack () {
-		int attackDmg = utility.randInt(11, 23);
-		return attackDmg;
+		return utility.randInt(11, 23);
 	}
 }

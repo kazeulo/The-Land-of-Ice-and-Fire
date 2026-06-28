@@ -110,7 +110,6 @@ public class BattleManager {
                 System.out.println("You managed to dodge!");
             } else {
                 int damage = house.takenDamage(enemy.attack());
-                house.reduceArmor(house.getHp());
                 System.out.println(enemy.getName() + " dealt " + damage + " damage to you.");
             }
         }

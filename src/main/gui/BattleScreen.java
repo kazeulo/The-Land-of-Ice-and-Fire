@@ -34,6 +34,7 @@ public class BattleScreen {
     private final int maxHouseHp;
     private final int maxArmor;
     private final BattleManager battleManager = new BattleManager();
+    private final int maxEnemyHp;
 
     // Live UI refs
     private ProgressBar playerHpBar, playerArmorBar, enemyHpBar;
@@ -53,6 +54,7 @@ public class BattleScreen {
         this.maxHouseHp = maxHouseHp;
         this.maxArmor   = maxArmor;
         this.enemy      = new EnemyFactory().createEnemy(level);
+        this.maxEnemyHp = this.enemy.getHp();
     }
 
     public static void show(Stage stage, House house, int level, int maxHouseHp, int maxArmor) {
@@ -94,7 +96,7 @@ public class BattleScreen {
         playerSprite = loadSprite(housePath(), 230);
         enemySprite  = loadSprite(enemyPath(),  230);
 
-        // Player stats───
+        // Player stats
         Text playerName = styledLabel("HOUSE " + house.getName().toUpperCase(), "#5D8AA8", 15);
         playerHpBar    = bar(house.getHp() / (double) maxHouseHp, "#2ECC71");
         playerHpText   = statText(house.getHp() + " / " + maxHouseHp + " HP");
@@ -113,7 +115,7 @@ public class BattleScreen {
         // Enemy stats
         Text enemyName  = styledLabel(enemy.getName().toUpperCase(), "#E74C3C", 15);
         enemyHpBar  = bar(1.0, "#E74C3C");
-        enemyHpText = statText("100 / 100 HP");
+        enemyHpText = statText(maxEnemyHp + " / " + maxEnemyHp + " HP");
 
         VBox enemyStats = enemyPanel(enemyName, enemyHpBar, enemyHpText);
 
@@ -161,7 +163,7 @@ public class BattleScreen {
         actions.setPadding(new Insets(10, 0, 14, 0));
         actions.setStyle("-fx-background-color: rgba(0,0,0,0.45);");
 
-        // Assemble───
+        // Assemble
         VBox main = new VBox(topBar, battlefield, logScroll, actions);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
         main.setFillWidth(true);
@@ -291,17 +293,21 @@ public class BattleScreen {
             addLog(enemy.getName() + " retaliates!");
             pause(550, e2 -> {
                 if (blocking) {
-                    addLog("Shield raised! Attack blocked — no damage taken.", "#3498DB");
+                    int newArmor = house.block();
+                    refreshPlayerStats();
+                    if (newArmor <= 0) {
+                        addLog("Shield raised! Attack blocked.", "#3498DB");
+                        addLog("Your armor is destroyed — you can no longer block!", "#E74C3C");
+                    } else {
+                        addLog("Shield raised! Attack blocked. (Armor: " + newArmor + ")", "#3498DB");
+                    }
                 } else if (battleManager.coinToss()) {
                     addLog("You dodged the attack!");
                 } else {
-                    int armorBefore = house.getArmor();
-                    int dmg     = house.takenDamage(enemy.attack());
-                    int newArmor = house.reduceArmor(house.getHp());
+                    int dmg = house.takenDamage(enemy.attack());
                     shake(playerSprite);
                     flash(playerSprite, Color.web("#C0392B"));
                     addLog(enemy.getName() + " dealt " + dmg + " damage to you.");
-                    if (newArmor <= 0 && armorBefore > 0) addLog("Your armor is broken!", "#E74C3C");
                     refreshPlayerStats();
                 }
 
@@ -342,9 +348,9 @@ public class BattleScreen {
 
     private void updateEnemyBar() {
         int hp = Math.max(0, enemy.getHp());
-        animateBar(enemyHpBar, hp / 100.0);
-        enemyHpText.setText(hp + " / 100 HP");
-        colorBar(enemyHpBar, hp, 100, "#E74C3C");
+        animateBar(enemyHpBar, hp / (double) maxEnemyHp);
+        enemyHpText.setText(hp + " / " + maxEnemyHp + " HP");
+        colorBar(enemyHpBar, hp, maxEnemyHp, "#E74C3C");
     }
 
     private void addLog(String msg) {
@@ -388,7 +394,7 @@ public class BattleScreen {
 
     private void setBtnsEnabled(boolean on) {
         attackBtn.setDisable(!on);
-        blockBtn.setDisable(!on);
+        blockBtn.setDisable(!on || house.getArmor() <= 0);
         runBtn.setDisable(!on);
         if (on) updateSpecialBtn();
         else    specialBtn.setDisable(true);

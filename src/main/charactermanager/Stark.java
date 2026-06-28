@@ -15,7 +15,7 @@ public class Stark extends House{
 	
 	// constructor
 	public Stark () {
-		super("Stark", HP+15, ARMOR);				// additional HP for house stark
+		super("Stark", HP+25, ARMOR);				// additional HP for house stark
 	}
 	
 	@Override

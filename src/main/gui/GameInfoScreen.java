@@ -51,7 +51,7 @@ public class GameInfoScreen {
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
-        // Content panels───
+        // Content panels
         Node housesPanel  = buildHousesPanel();
         Node enemiesPanel = buildEnemiesPanel();
         Node lorePanel    = buildLorePanel();
@@ -110,7 +110,7 @@ public class GameInfoScreen {
         ft.play();
     }
 
-    // Navigation helpers───
+    // Navigation helpers
 
     private static void activateNav(Button[] btns, Node[] panels, int idx, StackPane area) {
         for (int i = 0; i < btns.length; i++) {

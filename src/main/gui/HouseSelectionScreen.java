@@ -29,7 +29,7 @@ public class HouseSelectionScreen {
         "/main/assets/img/houses/lannister.png",
         "/main/assets/img/houses/snow.png"
     };
-    private static final int[]    HP       = {100, 100, 115};
+    private static final int[]    HP       = {100, 100, 125};
     private static final int[]    ARMOR    = {13, 18, 13};
     private static final String[] ATK_RANGE = {"18 – 25", "15 – 21", "16 – 22"};
     private static final String[] ACCENT   = {"#C0392B", "#D4AC0D", "#5D8AA8"};
@@ -121,7 +121,7 @@ public class HouseSelectionScreen {
         sep.setMaxHeight(1);
         sep.setStyle("-fx-background-color: " + ACCENT[idx] + "80;");
 
-        // Stat rows───
+        // Stat rows
         VBox stats = new VBox(5,
             statRow("HP",     String.valueOf(HP[idx]),     "#2ECC71"),
             statRow("Armor",  String.valueOf(ARMOR[idx]),  "#3498DB"),
@@ -129,7 +129,7 @@ public class HouseSelectionScreen {
         );
         stats.setAlignment(Pos.CENTER_LEFT);
 
-        // SELECT button───
+        // SELECT button
         Button selectBtn = new Button("SELECT");
         selectBtn.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
         selectBtn.setPrefSize(200, 44);

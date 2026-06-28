@@ -11,14 +11,16 @@ import main.game.Utilities;
 public abstract class House extends Character {
 	
 	Utilities utility = new Utilities();
-	
+
 	private int baseAttackDamage = 12;
 	int armor;
 	protected String lastMoveName = "";
-	
+	private final int maxHp;
+
 	public House (String name, int hp, int armor) {
 		super (name, hp);
 		this.armor = armor;
+		this.maxHp = hp;
 	}
 	
 	/*
@@ -56,17 +58,15 @@ public abstract class House extends Character {
 		return lastMoveName;
 	}
 	
-	// reducing value of armor every time enemy attacks
-	// but only if the player's hp is less than 85
+	/** Reduces armor by 2 when the player blocks an attack. Returns the new armor value. */
+	public int block() {
+		armor = Math.max(0, armor - 2);
+		return armor;
+	}
+
+	/** @deprecated Armor only degrades on block now; use {@link #block()} instead. */
+	@Deprecated
 	public int reduceArmor(int hp) {
-		if (hp < 85) {
-			armor -= 1;
-		}
-		// notify player if the armor is broken
-		if (armor <= 0) {
-			System.out.println("\nYour armor is broken!");
-			armor = 0;
-		}
 		return armor;
 	}
 
@@ -76,8 +76,7 @@ public abstract class House extends Character {
 	 * player will enter the tavern before battling the night king
 	 */
 	public int rest() {
-		// restore hp by 50
-		hp += 40;
+		hp = Math.min(hp + 40, maxHp);
 		return hp;
 	}
 

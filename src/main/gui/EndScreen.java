@@ -47,7 +47,7 @@ public class EndScreen {
         pulse.setCycleCount(1);
         pulse.play();
 
-        // Flavour text───
+        // Flavour text
         Text flavour = new Text(won
             ? "You have saved Westeros!"
             : "You have failed to save Westeros.");
