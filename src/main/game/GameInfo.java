@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class GameInfo {
 
     private final Utilities utility = new Utilities();
-    private final Scanner in = new Scanner(System.in);
+    private final Scanner in = UI.IN;
 
     /**
      * Main menu for viewing game-related information.

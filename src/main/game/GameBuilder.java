@@ -18,7 +18,7 @@ public class GameBuilder {
     private final Utilities utility = new Utilities();
     private final HouseFactory houseFactory = new HouseFactory();
     private final EnemyFactory enemyFactory = new EnemyFactory();
-    private final Scanner in = new Scanner(System.in);
+    private final Scanner in = UI.IN;
     private final BattleManager battleManager = new BattleManager();
 
     /**

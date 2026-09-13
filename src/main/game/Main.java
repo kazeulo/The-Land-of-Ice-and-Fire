@@ -33,26 +33,25 @@ public class Main {
 		System.out.println("\n                  *************  MAIN MENU  *************");
 
 		utility.sleep(900);
-		try (Scanner in = new Scanner(System.in)) {
-			boolean game = true;
-			while (game) {
-				System.out.println("\nWhat would you like to do?");
-				System.out.println("\t(1) Play");
-				System.out.println("\t(2) Game info");
-				System.out.println("\t(3) Exit");
-				System.out.print("[Int] You choose: ");
+		Scanner in = UI.IN;
+		boolean game = true;
+		while (game) {
+			System.out.println("\nWhat would you like to do?");
+			System.out.println("\t(1) Play");
+			System.out.println("\t(2) Game info");
+			System.out.println("\t(3) Exit");
+			System.out.print("[Int] You choose: ");
 
-				if (in.hasNextInt()) {
-					switch (in.nextInt()) {
-						case 1 -> gameBuilder.gameLoop();
-						case 2 -> gameInfo.chooseGameInfo();
-						case 3 -> game = false;
-						default -> System.out.println("Invalid input! Please enter 1, 2, or 3.");
-					}
-				} else {
-					System.out.println("Invalid input! Please enter a number.");
-					in.next();
+			if (in.hasNextInt()) {
+				switch (in.nextInt()) {
+					case 1 -> gameBuilder.gameLoop();
+					case 2 -> gameInfo.chooseGameInfo();
+					case 3 -> game = false;
+					default -> System.out.println("Invalid input! Please enter 1, 2, or 3.");
 				}
+			} else {
+				System.out.println("Invalid input! Please enter a number.");
+				in.next();
 			}
 		}
 	}

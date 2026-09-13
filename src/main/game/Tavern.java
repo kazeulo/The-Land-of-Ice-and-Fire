@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Tavern {
 
 	Utilities utility = new Utilities();
-	Scanner in = new Scanner(System.in);
+	Scanner in = UI.IN;
 
 	void tavern(House house) {
 		boolean valid = false;

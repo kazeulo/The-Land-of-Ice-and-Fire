@@ -47,6 +47,16 @@ public class BattleScreen {
     // Special ability cooldown (turns remaining)
     private int specialCooldown = 0;
 
+    // Combat log colors — kept distinct so the outcome of a move reads at a glance
+    private static final String NARRATION_COLOR = "#E8DAAF"; // neutral flavor text
+    private static final String HIT_COLOR       = "#6FCF97"; // you land a hit
+    private static final String CRIT_COLOR      = "#F5D060"; // you land a critical hit
+    private static final String MISS_COLOR      = "#95A5A6"; // any attack whiffs
+    private static final String DAMAGE_COLOR    = "#E74C3C"; // you take damage / defeat
+    private static final String DODGE_COLOR     = "#5DADE2"; // you evade an attack
+    private static final String BLOCK_COLOR     = "#3498DB"; // you block an attack
+    private static final String HEAL_COLOR      = "#27AE60"; // HP restored
+
     private BattleScreen(Stage stage, House house, int level, int maxHouseHp, int maxArmor) {
         System.out.println("Creating the BattleScreen");
         this.stage      = stage;
@@ -131,15 +141,15 @@ public class BattleScreen {
         battlefield.setAlignment(Pos.CENTER);
         VBox.setVgrow(battlefield, Priority.ALWAYS);
 
-        // Combat log─
-        logBox = new VBox(3);
-        logBox.setPadding(new Insets(6, 12, 6, 12));
+        // Combat log — only ever shows the current turn's messages (cleared on each new action)
+        logBox = new VBox(8);
+        logBox.setPadding(new Insets(10, 12, 10, 12));
         logBox.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
 
         logScroll = new ScrollPane(logBox);
         logScroll.setFitToWidth(true);
-        logScroll.setPrefHeight(115);
-        logScroll.setMaxHeight(115);
+        logScroll.setPrefHeight(150);
+        logScroll.setMaxHeight(150);
         logScroll.setStyle(
             "-fx-background-color: transparent;" +
             "-fx-border-color: #C8A84B40; -fx-border-width: 1 0 0 0;");
@@ -190,26 +200,29 @@ public class BattleScreen {
 
     private void doAttack() {
         setBtnsEnabled(false);
+        clearLog();
         addLog("You charge at the " + enemy.getName() + "!");
 
         pause(650, e1 -> {
+            // Roll the move up front so even a miss names what you tried.
+            int atk     = house.attack();
+            String move = house.getLastMoveName();
+
             if (battleManager.coinToss()) {
-                addLog("Your attack missed!");
+                addLog("You used " + move + " — but it missed!", MISS_COLOR);
             } else {
-                int atk      = house.attack();
-                String move  = house.getLastMoveName();
                 boolean crit = battleManager.critCheck();
                 if (crit) atk *= 2;
                 int dmg = enemy.takenDamage(atk);
                 shake(enemySprite);
-                flash(enemySprite, Color.web("#E74C3C"));
-                if (crit) addLog("CRITICAL HIT!  " + move + " dealt " + dmg + " damage!", "#F5D060");
-                else       addLog("You used " + move + "!  Dealt " + dmg + " damage to " + enemy.getName() + ".");
+                flash(enemySprite, Color.web(DAMAGE_COLOR));
+                if (crit) addLog("CRITICAL HIT!  " + move + " dealt " + dmg + " damage!", CRIT_COLOR);
+                else       addLog("You used " + move + "!  Dealt " + dmg + " damage to " + enemy.getName() + ".", HIT_COLOR);
                 updateEnemyBar();
             }
 
             if (!enemy.isAlive()) {
-                addLog(enemy.getName() + " has been slain!");
+                addLog(enemy.getName() + " has been slain!", HIT_COLOR);
                 pause(1100, e2 -> handleVictory());
                 return;
             }
@@ -219,6 +232,7 @@ public class BattleScreen {
 
     private void doBlock() {
         setBtnsEnabled(false);
+        clearLog();
         addLog("You raise your shield and brace for impact!");
         resolveEnemyTurn(true);
     }
@@ -227,6 +241,7 @@ public class BattleScreen {
         setBtnsEnabled(false);
         specialCooldown = 3;
         updateSpecialBtn();
+        clearLog();
 
         SpecialResult r = house.useSpecial(enemy);
         addLog(r.callout);
@@ -235,7 +250,7 @@ public class BattleScreen {
             animateSpecialHit(r, 0);
 
             if (!enemy.isAlive()) {
-                addLog(enemy.getName() + " has been slain!");
+                addLog(enemy.getName() + " has been slain!", HIT_COLOR);
                 pause(1100, e2 -> handleVictory());
                 return;
             }
@@ -244,7 +259,7 @@ public class BattleScreen {
                 pause(500, e2 -> {
                     animateSpecialHit(r, 1);
                     if (!enemy.isAlive()) {
-                        addLog(enemy.getName() + " fell!");
+                        addLog(enemy.getName() + " fell!", HIT_COLOR);
                         pause(1100, e3 -> handleVictory());
                         return;
                     }
@@ -260,7 +275,7 @@ public class BattleScreen {
 
     private void animateSpecialHit(SpecialResult r, int idx) {
         if (r.missed[idx]) {
-            addLog(r.missLogs[idx]);
+            addLog(r.missLogs[idx], MISS_COLOR);
         } else {
             shake(enemySprite);
             flash(enemySprite, Color.web(specialGlow()));
@@ -272,15 +287,16 @@ public class BattleScreen {
     private void applySpecialHealing(SpecialResult r) {
         if (r.healing > 0) {
             house.setHp(Math.min(house.getHp() + r.healing, maxHouseHp));
-            flash(playerSprite, Color.web("#27AE60"));
-            if (r.healLog != null) addLog(r.healLog, "#27AE60");
+            flash(playerSprite, Color.web(HEAL_COLOR));
+            if (r.healLog != null) addLog(r.healLog, HEAL_COLOR);
             refreshPlayerStats();
         }
     }
 
     private void doRun() {
         setBtnsEnabled(false);
-        addLog("You chose to flee... the realm is lost.");
+        clearLog();
+        addLog("You chose to flee... the realm is lost.", DAMAGE_COLOR);
         pause(1200, e -> EndScreen.show(stage, false, house));
     }
 
@@ -298,23 +314,23 @@ public class BattleScreen {
                     int newArmor = house.block();
                     refreshPlayerStats();
                     if (newArmor <= 0) {
-                        addLog("Shield raised! Attack blocked.", "#3498DB");
-                        addLog("Your armor is destroyed — you can no longer block!", "#E74C3C");
+                        addLog("Shield raised! Attack blocked.", BLOCK_COLOR);
+                        addLog("Your armor is destroyed — you can no longer block!", DAMAGE_COLOR);
                     } else {
-                        addLog("Shield raised! Attack blocked. (Armor: " + newArmor + ")", "#3498DB");
+                        addLog("Shield raised! Attack blocked. (Armor: " + newArmor + ")", BLOCK_COLOR);
                     }
                 } else if (battleManager.coinToss()) {
-                    addLog("You dodged the attack!");
+                    addLog("You dodged the attack!", DODGE_COLOR);
                 } else {
                     int dmg = house.takenDamage(enemy.attack());
                     shake(playerSprite);
-                    flash(playerSprite, Color.web("#C0392B"));
-                    addLog(enemy.getName() + " dealt " + dmg + " damage to you.");
+                    flash(playerSprite, Color.web(DAMAGE_COLOR));
+                    addLog(enemy.getName() + " dealt " + dmg + " damage to you.", DAMAGE_COLOR);
                     refreshPlayerStats();
                 }
 
                 if (!house.isAlive()) {
-                    addLog("You have fallen in battle...");
+                    addLog("You have fallen in battle...", DAMAGE_COLOR);
                     pause(1200, e3 -> EndScreen.show(stage, false, house));
                 } else {
                     decrementCooldown();
@@ -352,13 +368,18 @@ public class BattleScreen {
         colorBar(enemyHpBar, hp, maxEnemyHp, "#E74C3C");
     }
 
+    /** Wipes the log so only the upcoming turn's messages are shown. */
+    private void clearLog() {
+        logBox.getChildren().clear();
+    }
+
     private void addLog(String msg) {
-        addLog(msg, "#E8DAAF");
+        addLog(msg, NARRATION_COLOR);
     }
 
     private void addLog(String msg, String color) {
         Text t = new Text("> " + msg);
-        t.setFont(Font.font("Georgia", 13));
+        t.setFont(Fonts.pixel(13));
         t.setFill(Color.web(color));
         if (logBox.getWidth() > 0) t.setWrappingWidth(logBox.getWidth() - 28);
         logBox.getChildren().add(t);

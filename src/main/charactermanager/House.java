@@ -57,6 +57,10 @@ public abstract class House extends Character {
 	public String getLastMoveName() {
 		return lastMoveName;
 	}
+
+	public int getMaxHp() {
+		return maxHp;
+	}
 	
 	/** Reduces armor by 2 when the player blocks an attack. Returns the new armor value. */
 	public int block() {

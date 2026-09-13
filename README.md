@@ -2,6 +2,8 @@
 
 > A story-driven, turn-based RPG set in the world of Westeros. Choose your house, survive four levels of escalating enemies, and face the Night King in a final battle for the realm.
 
+![Gameplay screenshot](docs/images/game.png)
+
 Built with **Java 17+** and **JavaFX**.
 
 ---
@@ -102,6 +104,12 @@ java --module-path lib\javafx --add-modules javafx.controls,javafx.graphics,java
   -cp "bin;lib\junit-4.13.2.jar;lib\hamcrest-core-1.3.jar" ^
   org.junit.runner.JUnitCore tests.HouseFactoryTest tests.EnemyFactoryTest tests.HouseTest
 ```
+---
+
+## Assets
+
+Some assets where from deviant art; Others were made with AI-assitance.
+
 
 ---
 
