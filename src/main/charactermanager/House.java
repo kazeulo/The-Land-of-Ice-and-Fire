@@ -41,7 +41,7 @@ public abstract class House extends Character {
 	@Override
 	public int takenDamage(int attackDamage) {
 		// attack is reduced by 30% of armor
-		attackDamage -= (int)armor * 0.30;					
+		attackDamage -= (int)armor * 0.30;
 		return super.takenDamage(attackDamage);
 	}	
 	

@@ -43,7 +43,7 @@ public class HouseFactoryTest {
         assertEquals("Lannister", lannister.getName());
         assertEquals(18, lannister.getArmor());
         assertEquals("Stark", stark.getName());
-        assertEquals(115, stark.getHp());
+        assertEquals(125, stark.getHp());
     }
 
     @Test

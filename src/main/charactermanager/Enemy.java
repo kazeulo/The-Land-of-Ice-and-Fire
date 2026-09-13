@@ -11,7 +11,7 @@ public class Enemy extends Character{
 
 	private String location;
 	Utilities utility =  new Utilities();
-
+ 
 	public Enemy (String name, String location, int hp) {
 		super(name, hp);
 		this.location = location;
@@ -71,7 +71,7 @@ class WhiteWalker extends Enemy{
 
 	@Override
 	public int attack () {
-		return utility.randInt(9, 16);
+		return utility.randInt(9, 15);
 	}
 }
 

@@ -113,7 +113,7 @@ public class GameInfoScreen {
         ft.play();
     }
 
-    // ── Navigation ──────────────────────────────────────────────────────────
+    //  Navigation  ─
 
     private static void activateNav(Button[] btns, Node[] panels, int idx, StackPane area) {
         for (int i = 0; i < btns.length; i++) {
@@ -153,7 +153,7 @@ public class GameInfoScreen {
                "-fx-border-color: transparent;-fx-background-radius: 2;-fx-cursor: hand;";
     }
 
-    // ── Houses Panel ─────────────────────────────────────────────────────────
+    //  Houses Panel  
 
     private static Node buildHousesPanel() {
         VBox title = sectionTitle("NOBLE HOUSES OF WESTEROS");
@@ -166,14 +166,14 @@ public class GameInfoScreen {
              "Deals 2× attack damage in a single guaranteed hit. Never misses.\n3-turn cooldown.",
              "#5A0000CC", "#C0392B"},
             {"HOUSE LANNISTER", "Hear Me Roar!",
-             100, 18, "15 – 21",
+             100, 18, "16 – 22",
              "IRON BANK",
-             "Attacks and steals 50% of damage dealt as HP. On miss: recovers 10 HP instead.\n3-turn cooldown.",
+             "Attacks and steals 50% of damage dealt as HP. On miss: recovers 12 HP instead.\n3-turn cooldown.",
              "#5A4800CC", "#D4AC0D"},
             {"HOUSE STARK",     "Winter is Coming",
-             125, 13, "16 – 22",
+             125, 14, "16 – 22",
              "PACK HUNT",
-             "Ghost joins the fight — two separate strikes, each with its own miss chance.\n3-turn cooldown.",
+             "Ghost joins the fight — two guaranteed strikes, back to back. Never misses.\n3-turn cooldown.",
              "#1A2A3ACC", "#5D8AA8"},
         };
 
@@ -248,7 +248,7 @@ public class GameInfoScreen {
         return card;
     }
 
-    // ── Enemies Panel ────────────────────────────────────────────────────────
+    //  Enemies Panel ────────────────────────────────────────────────────────
 
     private static Node buildEnemiesPanel() {
         VBox title = sectionTitle("ENEMIES BEYOND THE WALL");
@@ -331,7 +331,7 @@ public class GameInfoScreen {
         return card;
     }
 
-    // ── How to Play Panel ────────────────────────────────────────────────────
+    //  How to Play Panel ────────────────────────────────────────────────────
 
     private static Node buildCombatPanel() {
         VBox title = sectionTitle("HOW TO PLAY");
@@ -405,7 +405,7 @@ public class GameInfoScreen {
         return section;
     }
 
-    // ── Lore Panel ────────────────────────────────────────────────────────────
+    //  Lore Panel  ───
 
     private static Node buildLorePanel() {
         VBox title = sectionTitle("THE LEGEND OF THE LONG NIGHT");
@@ -441,7 +441,7 @@ public class GameInfoScreen {
         return styledScroll(content);
     }
 
-    // ── Shared helpers ────────────────────────────────────────────────────────
+    //  Shared helpers ────────────────────────────────────────────────────────
 
     private static VBox sectionTitle(String text) {
         Text t = new Text(text);

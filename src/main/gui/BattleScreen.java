@@ -48,6 +48,7 @@ public class BattleScreen {
     private int specialCooldown = 0;
 
     private BattleScreen(Stage stage, House house, int level, int maxHouseHp, int maxArmor) {
+        System.out.println("Creating the BattleScreen");
         this.stage      = stage;
         this.house      = house;
         this.level      = level;

@@ -12,12 +12,12 @@ public class Lannister extends House{
 	
 	private static final int HP = 100;
 	private static final int ARMOR = 13;
-	
+
 	// constructor
 	public Lannister () {
-		super("Lannister", HP, ARMOR+5);			// additional armor for house Lannister	
+		super("Lannister", HP, ARMOR+5);			// additional armor for house Lannister
 	}
-	
+
 	@Override
 	public String specialName() { return "IRON BANK"; }
 
@@ -30,7 +30,7 @@ public class Lannister extends House{
 				"A Lannister always pays his debts! IRON BANK activated!",
 				new int[]{0}, new boolean[]{true},
 				new String[]{}, new String[]{"Attack missed!"},
-				10, "But gold sustains you — recovered 10 HP."
+				12, "But gold sustains you — recovered 12 HP."
 			);
 		}
 		int dmg  = enemy.takenDamage(attack());
@@ -57,17 +57,17 @@ public class Lannister extends House{
 			case 1:
 				lastMoveName = "Aura Cutter";
 				System.out.println("You used Aura Cutter!");
-				attackDmg = 3;
+				attackDmg = 4;
 				break;
 			case 2:
 				lastMoveName = "Blood Strike";
 				System.out.println("You used Blood Strike!");
-				attackDmg = 6;
+				attackDmg = 7;
 				break;
 			case 3:
 				lastMoveName = "Crescent Slash";
 				System.out.println("You used Cresent Slash!");
-				attackDmg = 9;
+				attackDmg = 10;
 				break;
 		}
 		return super.attack()+attackDmg;
