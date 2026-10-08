@@ -32,59 +32,74 @@ public class TavernScreen {
 
         // Header ─
         Text title = new Text("THE TAVERN");
-        title.setFont(Fonts.got(46));
+        title.setFont(Fonts.got(58));
         title.setFill(Color.web("#C8A84B"));
         title.setEffect(new DropShadow(22, Color.color(0.8, 0.5, 0.0, 0.8)));
 
         Text subtitle = new Text("Prepare yourself before facing the Night King");
-        subtitle.setFont(Font.font("Georgia", FontPosture.ITALIC, 18));
+        subtitle.setFont(Font.font("Georgia", FontPosture.ITALIC, 22));
         subtitle.setFill(Color.color(0.80, 0.75, 0.65, 0.88));
 
         Region divider = new Region();
-        divider.setPrefSize(400, 1);
-        divider.setMaxSize(400, 1);
+        divider.setPrefSize(440, 2);
+        divider.setMaxSize(440, 2);
         divider.setStyle("-fx-background-color: #C8A84B;");
         divider.setEffect(new DropShadow(6, Color.web("#C8A84B")));
 
         // Current stats
         Text statsTitle = new Text("Current Status  —  House " + house.getName());
-        statsTitle.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
+        statsTitle.setFont(Font.font("Georgia", FontWeight.BOLD, 17));
         statsTitle.setFill(Color.color(0.75, 0.75, 0.75, 0.9));
 
         Text hpStat    = new Text("HP: " + house.getHp() + " / " + maxHouseHp);
         Text armorStat = new Text("Armor: " + house.getArmor() + " / " + maxArmor);
         for (Text t : new Text[]{hpStat, armorStat}) {
-            t.setFont(Font.font("Georgia", 13));
+            t.setFont(Font.font("Georgia", 16));
             t.setFill(Color.color(0.72, 0.72, 0.72, 0.85));
         }
 
         HBox statsRow = new HBox(28, hpStat, armorStat);
         statsRow.setAlignment(Pos.CENTER);
 
-        // Innkeeper dialogue
-        Text innkeeperLabel = new Text("THE INNKEEPER");
-        innkeeperLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 11));
-        innkeeperLabel.setFill(Color.web("#C8A84B88"));
-
-        Text innkeeperText = new Text(innkeeperQuote(house, house.getHp(), maxHouseHp));
-        innkeeperText.setFont(Font.font("Georgia", FontPosture.ITALIC, 14));
-        innkeeperText.setFill(Color.color(0.74, 0.70, 0.60, 0.90));
-        innkeeperText.setTextAlignment(TextAlignment.CENTER);
-        innkeeperText.setLineSpacing(5);
-        innkeeperText.setWrappingWidth(560);
-
-        VBox innkeeperBox = new VBox(6, innkeeperLabel, innkeeperText);
-        innkeeperBox.setAlignment(Pos.CENTER);
-        innkeeperBox.setPadding(new Insets(8, 20, 8, 20));
-        innkeeperBox.setStyle(
-            "-fx-background-color: rgba(0,0,0,0.30);" +
-            "-fx-border-color: #C8A84B30;" +
-            "-fx-border-width: 1;-fx-background-radius: 3;-fx-border-radius: 3;");
-        innkeeperBox.setMaxWidth(600);
-
-        VBox header = new VBox(10, title, subtitle, divider, statsTitle, statsRow, innkeeperBox);
+        VBox header = new VBox(10, title, subtitle, divider, statsTitle, statsRow);
         header.setAlignment(Pos.CENTER);
         header.setPadding(new Insets(28, 0, 20, 0));
+
+        // Innkeeper dialogue — a classic RPG speech box: name tag on top, anchored beneath his portrait
+        Text innkeeperLabel = new Text("THE INNKEEPER");
+        innkeeperLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 12));
+        innkeeperLabel.setFill(Color.web("#2A1A06"));
+
+        HBox nameTag = new HBox(innkeeperLabel);
+        nameTag.setAlignment(Pos.CENTER);
+        nameTag.setPadding(new Insets(5, 16, 5, 16));
+        nameTag.setStyle(
+            "-fx-background-color: #C8A84B;" +
+            "-fx-background-radius: 4 4 0 0;");
+        nameTag.setEffect(new DropShadow(6, Color.color(0, 0, 0, 0.5)));
+
+        HBox nameTagRow = new HBox(nameTag);
+        nameTagRow.setAlignment(Pos.CENTER_LEFT);
+        nameTagRow.setPadding(new Insets(0, 0, 0, 22));
+
+        Text innkeeperText = new Text(innkeeperQuote(house, house.getHp(), maxHouseHp));
+        innkeeperText.setFont(Font.font("Georgia", FontPosture.ITALIC, 15));
+        innkeeperText.setFill(Color.color(0.92, 0.88, 0.78, 0.95));
+        innkeeperText.setTextAlignment(TextAlignment.LEFT);
+        innkeeperText.setLineSpacing(5);
+        innkeeperText.setWrappingWidth(460);
+
+        VBox dialogueBody = new VBox(innkeeperText);
+        dialogueBody.setPadding(new Insets(14, 20, 16, 20));
+        dialogueBody.setStyle(
+            "-fx-background-color: rgba(8,5,0,0.80);" +
+            "-fx-border-color: #C8A84B;" +
+            "-fx-border-width: 2;" +
+            "-fx-background-radius: 0 6 6 6;" +
+            "-fx-border-radius: 0 6 6 6;");
+
+        VBox dialogueBox = new VBox(0, nameTagRow, dialogueBody);
+        dialogueBox.setMaxWidth(500);
 
         // Option cards
         VBox restCard    = optionCard("REST",
@@ -104,7 +119,7 @@ public class TavernScreen {
 
         // Result label (hidden until choice made)
         Text result = new Text();
-        result.setFont(Font.font("Georgia", FontPosture.ITALIC, 16));
+        result.setFont(Font.font("Georgia", FontPosture.ITALIC, 19));
         result.setFill(Color.web("#C8A84B"));
         result.setVisible(false);
 
@@ -147,7 +162,19 @@ public class TavernScreen {
         bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(16, 0, 0, 0));
 
-        VBox content = new VBox(0, header, cards, bottom);
+        // Left column - title, stats, and the choices (sized to its content, not stretched)
+        VBox leftColumn = new VBox(0, header, cards, bottom);
+        leftColumn.setAlignment(Pos.CENTER);
+
+        // Right column - the innkeeper's dialogue sits above him, like a speech bubble over his head
+        ImageView keeperBig = loadKeeperSprite(650);
+        VBox rightColumn = new VBox(4, dialogueBox, keeperBig);
+        rightColumn.setAlignment(Pos.CENTER);
+
+        // Both columns are sized to their content and centered as one compact group —
+        // previously the left column stretched to fill the window, stranding its
+        // centered content far from the innkeeper on the right.
+        HBox content = new HBox(40, leftColumn, rightColumn);
         content.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(bgView, overlay, content);
@@ -167,32 +194,49 @@ public class TavernScreen {
         ft.play();
     }
 
-    // Helpers─
+    // Helpers
+
+    private static ImageView loadKeeperSprite(double height) {
+        try {
+            ImageView iv = new ImageView(new Image(
+                TavernScreen.class.getResourceAsStream("/main/assets/img/npc/tavern_keeper.png")));
+            // The source art is a 500x500 canvas but the figure only fills its center
+            // (roughly x:77-405, y:31-489) — crop that dead transparent margin out so the
+            // rendered sprite isn't surrounded by invisible padding that reads as empty space.
+            iv.setViewport(new javafx.geometry.Rectangle2D(77, 31, 328, 458));
+            iv.setFitHeight(height);
+            iv.setPreserveRatio(true);
+            iv.setEffect(new DropShadow(18, Color.color(0.8, 0.5, 0.0, 0.6)));
+            return iv;
+        } catch (Exception e) {
+            return new ImageView();
+        }
+    }
 
     private static VBox optionCard(String heading, String effect, String desc,
                                     String bgColor, String accent) {
         Text headTxt = new Text(heading);
-        headTxt.setFont(Font.font("Georgia", FontWeight.BOLD, 17));
+        headTxt.setFont(Font.font("Georgia", FontWeight.BOLD, 20));
         headTxt.setFill(Color.web(accent));
         headTxt.setEffect(new DropShadow(8, Color.web(accent)));
 
         Text effectTxt = new Text(effect);
-        effectTxt.setFont(Font.font("Georgia", FontWeight.BOLD, 13));
+        effectTxt.setFont(Font.font("Georgia", FontWeight.BOLD, 15));
         effectTxt.setFill(Color.web("#C8A84B"));
 
         Region sep = new Region();
-        sep.setPrefSize(170, 1);
+        sep.setPrefSize(195, 1);
         sep.setMaxHeight(1);
         sep.setStyle("-fx-background-color: " + accent + "60;");
 
         Text descTxt = new Text(desc);
-        descTxt.setFont(Font.font("Georgia", FontPosture.ITALIC, 13));
+        descTxt.setFont(Font.font("Georgia", FontPosture.ITALIC, 15));
         descTxt.setFill(Color.color(0.76, 0.76, 0.76, 0.9));
-        descTxt.setWrappingWidth(190);
+        descTxt.setWrappingWidth(215);
 
         Button choose = new Button("CHOOSE");
-        choose.setFont(Font.font("Georgia", FontWeight.BOLD, 14));
-        choose.setPrefSize(160, 40);
+        choose.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
+        choose.setPrefSize(185, 46);
         String bs = choiceBtnStyle(accent, false), hs = choiceBtnStyle(accent, true);
         choose.setStyle(bs);
         choose.setOnMouseEntered(e -> { if (!choose.isDisabled()) choose.setStyle(hs); });
@@ -206,10 +250,10 @@ public class TavernScreen {
             st.setToX(1.0); st.setToY(1.0); st.play();
         });
 
-        VBox card = new VBox(10, headTxt, effectTxt, sep, descTxt, choose);
+        VBox card = new VBox(12, headTxt, effectTxt, sep, descTxt, choose);
         card.setAlignment(Pos.TOP_CENTER);
-        card.setPadding(new Insets(20, 18, 20, 18));
-        card.setPrefSize(230, 230);
+        card.setPadding(new Insets(24, 20, 24, 20));
+        card.setPrefSize(260, 260);
         card.setStyle(
             "-fx-background-color: " + bgColor + "CC;" +
             "-fx-border-color: " + accent + "70;" +
@@ -243,8 +287,8 @@ public class TavernScreen {
 
     private static Button continueButton() {
         Button btn = new Button("FACE THE NIGHT KING  >");
-        btn.setFont(Font.font("Georgia", FontWeight.BOLD, 17));
-        btn.setPrefSize(280, 50);
+        btn.setFont(Font.font("Georgia", FontWeight.BOLD, 20));
+        btn.setPrefSize(320, 56);
         String bs = "-fx-background-color:#6E0000;-fx-text-fill:#E8DAAF;" +
                     "-fx-border-color:rgba(200,168,75,0.6);-fx-border-width:1;" +
                     "-fx-border-radius:2;-fx-background-radius:2;-fx-cursor:hand;";
